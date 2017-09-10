@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { IPageEvent } from '../api/page-event.interface';
 
 @Injectable()
 export class PaginationService {
@@ -20,7 +21,7 @@ export class PaginationService {
 
     private pageCount: number;
 
-    private pageSubject: Subject<string>;
+    private pageSubject: Subject<IPageEvent>;
 
     private isConfigured: boolean;
 
@@ -30,7 +31,7 @@ export class PaginationService {
         this.currentPage = 1;
         this.itemPageCount = 10;
 
-        this.pageSubject = new Subject<string>();
+        this.pageSubject = new Subject<IPageEvent>();
 
         this.isConfigured = false;
     }
@@ -45,7 +46,12 @@ export class PaginationService {
 
         if ( !this.isConfigured ) {
             this.setData(data, value);
-            this.notifyObserver( PaginationService.CONFIGURED );
+            this.notifyObserver( {
+                name: PaginationService.CONFIGURED,
+                data: {
+                    page: this.getCurrentPage()
+                }
+            });
             this.isConfigured = true;
         }
     }
@@ -72,7 +78,7 @@ export class PaginationService {
      *
      * @returns {Observable<string>}
      */
-    public getNotifier(): Observable<string> {
+    public getNotifier(): Observable<IPageEvent> {
         return this.pageSubject
             .asObservable();
     }
@@ -83,7 +89,7 @@ export class PaginationService {
      * @private
      * @param {string} event
      */
-    private notifyObserver(event: string): void {
+    private notifyObserver(event: IPageEvent): void {
         this.pageSubject.next(event);
     }
 
@@ -101,7 +107,12 @@ export class PaginationService {
 
         if (validPage) {
             this.setData('currentPage', page);
-            this.notifyObserver(PaginationService.DISPLAY_PAGE);
+            this.notifyObserver({
+                name: PaginationService.DISPLAY_PAGE,
+                data: {
+                    page
+                }
+            });
         }
     }
 
@@ -113,7 +124,10 @@ export class PaginationService {
      */
     public update(data: {} | string, value?: number): void {
         this.setData(data, value);
-        this.notifyObserver(PaginationService.UPDATE);
+        this.notifyObserver({
+            name: PaginationService.UPDATE,
+            data: {}
+        });
     }
 
     /**
