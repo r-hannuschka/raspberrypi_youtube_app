@@ -1,0 +1,9 @@
+<nav class="pagination" *ngIf="pageItems.length > 1">
+    <ul class="pagination">
+        <li *ngFor='let pageItem of pageItems' (click)='setPage(pageItem.content)' [class.active]='pageItem.isActive' class='page-item'>
+            <a class="page-link">
+                {{pageItem.content}}
+            </a>
+        </li>
+    </ul>
+</nav>

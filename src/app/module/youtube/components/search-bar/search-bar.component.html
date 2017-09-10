@@ -1,0 +1,13 @@
+<form (ngSubmit)="onSubmit()" novalidate>
+  <div class="form-group has-danger">
+    <div class="input-group">
+      <input type="text" [formControl]="searchControl" class="form-control search-field" placeholder="Suchen ...">
+      <button type="submit" class="input-group-addon">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+    <div class="invalid-feedback" *ngIf=" ! searchControl.valid && isSend">
+      <strong>Field is required</strong>
+    </div>
+  </div>
+</form>
