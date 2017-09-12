@@ -59,6 +59,7 @@ export class ListComponent implements OnInit {
     if (res.success) {
       this.response = res;
       this.items = this.items.concat(res.data.items);
+      this.isLoading = false;
 
       /**
        * @todo fix me, timeout 0 to put this on next event cycle for js

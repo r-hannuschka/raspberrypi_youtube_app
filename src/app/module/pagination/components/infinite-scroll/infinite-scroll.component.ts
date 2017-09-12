@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Host, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Host, Input, OnInit, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { PaginationService } from '../../providers/pagination.service';
 import { IPageEvent } from '../../api/page-event.interface';
@@ -12,6 +12,11 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
 
   @ViewChild('infiniteWrap')
   public contentWrapper: ElementRef;
+
+  @Input()
+  public autoLoadCount = -1;
+
+  public showMore: boolean;
 
   private pagination: PaginationService;
 
@@ -27,7 +32,8 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
 
-    this.page = 1;
+    this.page = this.pagination.getCurrentPage();
+    this.showMore = false;
 
     // register pagniation events
     this.pagination
@@ -46,6 +52,11 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
       this.contentWrapper.nativeElement.getBoundingClientRect();
   }
 
+  public loadNextPage(): void {
+    this.showMore = false;
+    this.pagination.showNextPage();
+  }
+
   private getWindowScrollStream() {
     return Observable
       .fromEvent(window, 'scroll')
@@ -58,21 +69,26 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
   private handlePaginationEvent(event: IPageEvent) {
 
     if (event.name === PaginationService.UPDATE) {
-
       this.page = this.pagination.getCurrentPage();
-
       this.wrapperCoordinates =
         this.contentWrapper.nativeElement.getBoundingClientRect();
     }
   }
 
   private handleWindowScroll(val: number) {
+    this.showMore = false;
+    if ( val > (this.wrapperCoordinates.height + - 10) && this.page === this.pagination.getCurrentPage() ) {
 
-    if (
-      val > (this.wrapperCoordinates.height + - 10) &&
-      this.page === this.pagination.getCurrentPage()
-    ) {
-      this.pagination.showNextPage();
+      const loadNextPage: boolean =
+        this.autoLoadCount === -1 || this.pagination.getCurrentPage() < this.autoLoadCount;
+
+      if ( loadNextPage ) {
+        this.pagination.showNextPage();
+      }
+
+      if ( ! this.pagination.isLastPage() && ! loadNextPage ) {
+        this.showMore = true;
+      }
     }
   }
 }

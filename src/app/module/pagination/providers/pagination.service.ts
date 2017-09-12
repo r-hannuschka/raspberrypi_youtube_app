@@ -26,10 +26,12 @@ export class PaginationService {
     private isConfigured: boolean;
 
     constructor() {
+
         // set default values
         this.itemTotalCount = 1;
         this.currentPage = 1;
         this.itemPageCount = 10;
+        this.pageCount = 1;
 
         this.pageSubject = new Subject<IPageEvent>();
 
@@ -84,13 +86,13 @@ export class PaginationService {
     }
 
     /**
-     * notfiy observer on update or show page
+     * returns true if current page is the last page of set
      *
-     * @private
-     * @param {string} event
+     * @returns {boolean}
+     * @memberof PaginationService
      */
-    private notifyObserver(event: IPageEvent): void {
-        this.pageSubject.next(event);
+    public isLastPage(): boolean {
+        return this.getCurrentPage() === this.pageCount;
     }
 
     /**
@@ -137,6 +139,16 @@ export class PaginationService {
             name: PaginationService.UPDATE,
             data: {}
         });
+    }
+
+    /**
+     * notfiy observer on update or show page
+     *
+     * @private
+     * @param {string} event
+     */
+    private notifyObserver(event: IPageEvent): void {
+        this.pageSubject.next(event);
     }
 
     /**

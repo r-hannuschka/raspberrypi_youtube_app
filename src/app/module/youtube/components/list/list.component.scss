@@ -3,4 +3,12 @@ app-youtube-list {
     .card-group {
         justify-content: space-between;
     }
+
+    .loading-indicator {
+        align-items: center;
+        background: #FFF;
+        display: flex;
+        height: 2.5rem;
+        justify-content: center;
+    }
 }
