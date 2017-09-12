@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { PageNavigationComponent, PaginationComponent } from './components';
+import { InfiniteScrollComponent, PageNavigationComponent, PaginationComponent } from './components';
 import { PaginationService } from './providers/pagination.service';
 
 @NgModule({
-    exports: [PaginationComponent, PageNavigationComponent],
+    exports: [ InfiniteScrollComponent, PaginationComponent, PageNavigationComponent],
     imports: [BrowserModule],
-    declarations: [PageNavigationComponent, PaginationComponent]
+    declarations: [PageNavigationComponent, PaginationComponent, InfiniteScrollComponent]
 })
 export class PaginationModule {}

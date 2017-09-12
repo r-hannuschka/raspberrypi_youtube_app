@@ -117,6 +117,15 @@ export class PaginationService {
     }
 
     /**
+     * display next page
+     *
+     * @memberof PaginationService
+     */
+    public showNextPage(): void {
+        this.showPage(this.getCurrentPage() + 1);
+    }
+
+    /**
      * update data this will trigger PaginationService.UPDATE event
      *
      * @param {({} | string)} data

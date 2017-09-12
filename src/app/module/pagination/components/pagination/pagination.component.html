@@ -1,6 +1,20 @@
-<!-- infinite scroll | pagination -->
-<div class="pagination-component">
-    <app-page-navigation></app-page-navigation>
-    <ng-content></ng-content>
-    <app-page-navigation></app-page-navigation>
+<div class="pagination-component" [ngSwitch]="type" >
+    <ng-container *ngSwitchCase="'infinite'" [ngTemplateOutlet]="infinite"></ng-container>
+    <ng-container *ngSwitchDefault [ngTemplateOutlet]="pages"></ng-container>
 </div>
+
+<ng-template #content>
+    <ng-content></ng-content>
+</ng-template>
+
+<ng-template #pages>
+    <app-page-navigation></app-page-navigation>
+    <ng-template *ngTemplateOutlet="content"></ng-template>
+    <app-page-navigation></app-page-navigation>
+</ng-template>
+
+<ng-template #infinite>
+    <app-pagination-infinite-scroll>
+        <ng-template *ngTemplateOutlet="content"></ng-template>
+    </app-pagination-infinite-scroll>
+</ng-template>

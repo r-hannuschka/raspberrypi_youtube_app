@@ -1,4 +1,4 @@
-import { Component, ContentChild, Host, QueryList, ViewChildren } from '@angular/core';
+import { Component, ContentChild, Host, QueryList, ViewChildren, Input, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { PageNavigationComponent } from '../page-navigation/page-navigation.component';
 import { PaginationService } from '../../providers/pagination.service';
@@ -9,6 +9,14 @@ import { PaginationService } from '../../providers/pagination.service';
     providers: [ PaginationService ],
     viewProviders: [ PaginationService ]
 })
-export class PaginationComponent {
-    constructor() {}
+
+export class PaginationComponent implements OnInit {
+
+  @Input()
+  public type: 'page';
+
+  constructor() { }
+
+  ngOnInit() {
+  }
 }

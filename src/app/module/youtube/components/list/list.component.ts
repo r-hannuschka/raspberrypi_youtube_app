@@ -9,11 +9,14 @@ import { ApiService } from '../../provider/api.service';
   encapsulation: ViewEncapsulation.None,
   selector: 'app-youtube-list',
   styleUrls: ['./list.component.scss'],
-  templateUrl: './list.component.html'
+  templateUrl: './list.component.html',
+  viewProviders: [PaginationService]
 })
 export class ListComponent implements OnInit {
 
-  private items: IItem[];
+  public isLoading = false;
+
+  private items: IItem[] = [];
 
   private response: IResponseList;
 
@@ -22,37 +25,24 @@ export class ListComponent implements OnInit {
     private apiService: ApiService
   ) { }
 
-  ngOnInit() {
+  /**
+   *
+   *
+   * @memberof ListComponent
+   */
+  public ngOnInit() {
+
+    this.isLoading = true;
 
     this.pagination
       .getNotifier()
-      .subscribe( (event: IPageEvent) => {
+      .subscribe((event: IPageEvent) => {
         this.handlePagniationEvent(event);
       });
 
     // initial oder bei suche
     this.apiService
       .list().subscribe((res: IResponseList) => {
-        this.handleResponse(res);
-      });
-  }
-
-  /**
-   * @todo refactor youtube does not support specific pages
-   * display specific page
-   *
-   * @private
-   * @param {number} page
-   * @memberof ListComponent
-   */
-  private displayPage(page: number) {
-
-    const param = {
-      pageToken: this.response.data.nextPageToken
-    };
-
-    this.apiService
-      .list(param).subscribe((res: IResponseList) => {
         this.handleResponse(res);
       });
   }
@@ -66,30 +56,42 @@ export class ListComponent implements OnInit {
    */
   private handleResponse(res: IResponseList) {
 
-    if ( res.success ) {
+    if (res.success) {
       this.response = res;
-      this.items    = res.data.items;
+      this.items = this.items.concat(res.data.items);
 
-      this.pagination.update({
-        itemPageCount: res.data.pageInfo.resultsPerPage,
-        itemTotalCount: res.data.pageInfo.totalResults
-      });
+      /**
+       * @todo fix me, timeout 0 to put this on next event cycle for js
+       */
+      window.setTimeout(() => {
+        this.pagination.update({
+          itemPageCount: res.data.pageInfo.resultsPerPage,
+          itemTotalCount: res.data.pageInfo.totalResults
+        });
+      }, 0);
     }
   }
 
   /**
-   * @todo refactor youtube dont support specific pages
-   * handle pagination event
-   *
    * @private
    * @param {IPageEvent} event
    * @memberof ListComponent
    */
   private handlePagniationEvent(event: IPageEvent) {
-      switch ( event.name ) {
-        case PaginationService.DISPLAY_PAGE:
-          this.displayPage(event.data.page);
-          break;
-      }
+
+    switch (event.name) {
+      case PaginationService.DISPLAY_PAGE:
+        const param = {
+          pageToken: this.response.data.nextPageToken
+        };
+
+        this.apiService
+          .list(param).subscribe((res: IResponseList) => {
+            this.handleResponse(res);
+          });
+
+        this.isLoading = true;
+        break;
+    }
   }
 }

@@ -1,6 +1,7 @@
-<div class="container">
-
-    <div class="card-group">
-        <app-youtube-item-card *ngFor="let item of items" [item]="item"></app-youtube-item-card>
+<app-pagination-infinite-scroll>
+    <div class="container">
+        <div class="card-group">
+            <app-youtube-item-card *ngFor="let item of items" [item]="item"></app-youtube-item-card>
+        </div>
     </div>
-</div>
+</app-pagination-infinite-scroll>
