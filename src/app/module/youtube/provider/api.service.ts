@@ -16,8 +16,18 @@ export class ApiService {
     };
 
     return this.httpClient
-      /** @todo make config */
-      .get('http://192.168.188.31:8080/api/youtube/index/list', options)
+      .get('http://localhost:8080/api/youtube/index/list', options)
+      .map( (res: Response) => res.json() );
+  }
+
+  public downloadVideo(param = {})
+  {
+    const options: RequestOptionsArgs = {
+      params: param
+    };
+
+    return this.httpClient
+      .get('http://localhost:8080/api/youtube/video/download', options)
       .map( (res: Response) => res.json() );
   }
 }
