@@ -56,6 +56,19 @@ export class SocketManager {
   }
 
   /**
+   * send execute message to server
+   *
+   * @param channel
+   * @param task
+   */
+  public exec(channel: string, task): void {
+    this.socket.emit('exec', {
+      channel,
+      task
+    });
+  }
+
+  /**
    * create new proxy observer and add to subscription list
    * of channel subject to get notified if new data are here.
    *
@@ -99,14 +112,14 @@ export class SocketManager {
    * @memberof SocketManager
    */
   private registerEvents() {
-    this.socket.on('message', (body) => {
+    this.socket.on('message', (response) => {
       // channelID
-      const cID  = body.channel;
-      const data = body.data;
+      const cID  = response.channel;
+      const body = response.body;
 
       if ( this.channelMap.has(cID) ) {
         const channel = this.channelMap.get(cID);
-        channel.subject.next(data);
+        channel.subject.next(body);
       }
     });
   }

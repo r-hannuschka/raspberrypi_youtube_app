@@ -1,0 +1,26 @@
+@import '~bootstrap/scss/_functions.scss';
+@import '~bootstrap/scss/_variables.scss';
+
+app-youtube-downloads {
+
+    .file-list {
+
+        .progress {
+            align-self: center;
+            flex: 1 0;
+        }
+
+        .download-state {
+            width: 100px;
+            padding: .3rem 0;
+
+            &.state-progress {
+                background: theme-color("primary");
+            }
+
+            &.state-pending {
+                background: theme-color("secondary");
+            }
+        }
+    }
+}

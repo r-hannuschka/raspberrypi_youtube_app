@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TruncateModule } from 'ng2-truncate';
 import { PaginationModule } from '../pagination/pagination.module';
-import { SocketModule } from '../socket/socket.module';
+import { YoutubeDownloadModule } from '../youtube-download/youtube-download.module';
 
 import { ApiService } from './provider/api.service';
 
@@ -12,7 +12,6 @@ import { ListComponent } from './components/list/list.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { MainComponent } from './components/main/main.component';
 import { ItemCardComponent } from './components/item/item-card.component';
-import { DownloadComponent } from './components/download/download.component';
 
 @NgModule({
   imports: [
@@ -21,8 +20,8 @@ import { DownloadComponent } from './components/download/download.component';
     HttpModule,
     PaginationModule,
     ReactiveFormsModule,
-    SocketModule,
-    TruncateModule
+    TruncateModule,
+    YoutubeDownloadModule
   ],
   providers: [
     ApiService
@@ -31,8 +30,7 @@ import { DownloadComponent } from './components/download/download.component';
     ItemCardComponent,
     ListComponent,
     MainComponent,
-    SearchBarComponent,
-    DownloadComponent
+    SearchBarComponent
   ],
   exports: [MainComponent]
 })

@@ -1,0 +1,18 @@
+<div>
+    <!-- 
+        liste von downloads ( aktiv / abgeschlossen )
+        cancel / entfernen
+        progressbar
+    -->
+    <ul class="list-group file-list">
+        <li *ngFor="let download of downloads" class="list-group-item d-flex badge-info justify-content-between">
+            <div class="progress ml-3 mr-3">
+                <div class="progress-bar" [ngStyle]="{'width': (download.loaded/download.size|percent)}"></div>
+            </div>
+            <span class="badge badge-info badge-pill download-state state-{{download.state}}">
+                {{download.state}}
+            </span>
+        </li>
+    </ul>
+    <button class="btn btn-default" (click)="downloadVideo()">download</button>
+</div>
