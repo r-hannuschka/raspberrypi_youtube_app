@@ -5,13 +5,19 @@
         progressbar
     -->
     <ul class="list-group file-list">
-        <li *ngFor="let download of downloads" class="list-group-item d-flex badge-info justify-content-between">
-            <div class="progress ml-3 mr-3">
-                <div class="progress-bar" [ngStyle]="{'width': (download.loaded/download.size|percent)}"></div>
+        <li *ngFor="let download of downloads" class="list-group-item d-flex badge-info flex-column">
+            <span class="text-primary leading-5 mb-2">{{download.name}}</span>
+            <div class="d-flex flex-row">
+                <span class="badge badge-info badge-pill download-state state-{{download.state}} d-flex justify-content-center align-items-center">
+                    {{download.state}}
+                </span>
+                <div class="progress ml-3 mr-3">
+                    <div class="progress-bar" [ngStyle]="{'width': (download.loaded)}">{{download.loaded}}</div>
+                </div>
+                <button class="btn btn-outline-danger btn-sm" (click)="cancelDownload(download)">
+                    <i class="fa fa-ban"></i>
+                </button>
             </div>
-            <span class="badge badge-info badge-pill download-state state-{{download.state}}">
-                {{download.state}}
-            </span>
         </li>
     </ul>
     <button class="btn btn-default" (click)="downloadVideo()">download</button>

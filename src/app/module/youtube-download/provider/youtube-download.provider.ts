@@ -11,6 +11,7 @@ export interface IDownload {
     path: string;
     pid: string;
     size: number;
+    state: string;
     uri: string;
 }
 
@@ -19,11 +20,11 @@ export class YoutubeDownloadService {
 
     public static readonly SOCKET_EVENT_CONNECTED = 'connect';
 
-    public static readonly SOCKET_EVENT_DOWNLOAD_END = 'end';
+    public static readonly SOCKET_EVENT_DOWNLOAD_END = 'finish';
 
-    public static readonly SOCKET_EVENT_DOWNLOAD_START = 'start';
+    public static readonly SOCKET_EVENT_DOWNLOAD_UPDATE = 'update';
 
-    public static readonly SOCKET_EVENT_DOWNLOAD_PROGRESS = 'progress';
+    public static readonly SOCKET_EVENT_DOWNLOAD_INITIALIZED = 'initialized';
 
     private downloads: Map<string, IDownload>;
 
@@ -48,8 +49,18 @@ export class YoutubeDownloadService {
         );
 
         this.socketSream = this.socketManager
-            .getMessages('youtube.download')
-            .bufferTime(500);
+            .getMessages('youtube.download');
+    }
+
+    public cancelDownload(id) {
+
+        if ( this.downloads.has(id) ) {
+            this.socketManager
+                .exec('youtube.download', {
+                    action: 'cancel',
+                    data: id
+                });
+        }
     }
 
     /**
@@ -72,9 +83,10 @@ export class YoutubeDownloadService {
             if ( ! this.isListenToSocket ) {
                 this.isListenToSocket = true;
                 this.socketSream
+                    .bufferTime(500)
                     .subscribe((response: any[]) => {
 
-                        if (!response.length) {
+                        if ( ! response.length) {
                             return;
                         }
 
@@ -82,7 +94,6 @@ export class YoutubeDownloadService {
                             this.handleResponse(responseData);
                         });
 
-                        // @todo notify only if something has changed
                         this.downloadStream.next(
                             Array.from(this.downloads.values())
                         );
@@ -112,14 +123,11 @@ export class YoutubeDownloadService {
         const event: string = response.event;
 
         switch (event) {
-            case YoutubeDownloadService.SOCKET_EVENT_DOWNLOAD_START:
+            case YoutubeDownloadService.SOCKET_EVENT_DOWNLOAD_INITIALIZED:
                 this.addDownload(download as IDownload);
                 break;
-            case YoutubeDownloadService.SOCKET_EVENT_DOWNLOAD_PROGRESS:
+            case YoutubeDownloadService.SOCKET_EVENT_DOWNLOAD_UPDATE:
                 this.updateDownload(download as IDownload);
-                break;
-            case YoutubeDownloadService.SOCKET_EVENT_DOWNLOAD_END:
-                this.finishDownload(download as IDownload);
                 break;
             case YoutubeDownloadService.SOCKET_EVENT_CONNECTED:
                 this.initDownloads(download as IDownload[]);
@@ -141,12 +149,8 @@ export class YoutubeDownloadService {
         if (this.downloads.has(download.pid)) {
             const task = this.downloads.get(download.pid);
             task.loaded = download.loaded;
-        }
-    }
-
-    private finishDownload(download: IDownload) {
-        if (this.downloads.has(download.pid)) {
-            // this.downloads.delete(download.pid);
+            task.size   = download.size;
+            task.state  = download.state;
         }
     }
 }

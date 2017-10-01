@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { SocketModule } from '../socket/socket.module';
 import { DownloadComponent } from './components/download/download.component';
 import { YoutubeDownloadService } from './provider/youtube-download.provider';
-import { DownloadStateIcon } from './directives/download-state-icon.pipe';
 
 @NgModule({
   imports: [
@@ -14,8 +13,7 @@ import { DownloadStateIcon } from './directives/download-state-icon.pipe';
       YoutubeDownloadService
   ],
   declarations: [
-    DownloadComponent,
-    DownloadStateIcon
+    DownloadComponent
   ],
   exports: [DownloadComponent]
 })
