@@ -16,7 +16,7 @@ export interface IDownload {
 }
 
 @Injectable()
-export class YoutubeDownloadService {
+export class DownloadService {
 
     public static readonly SOCKET_EVENT_CONNECTED = 'connect';
 
@@ -66,7 +66,7 @@ export class YoutubeDownloadService {
     /**
      * send download order through sockets to server
      *
-     * @memberof YoutubeDownloadService
+     * @memberof DownloadService
      */
     public downloadVideo(data) {
         this.socketManager
@@ -123,13 +123,13 @@ export class YoutubeDownloadService {
         const event: string = response.event;
 
         switch (event) {
-            case YoutubeDownloadService.SOCKET_EVENT_DOWNLOAD_INITIALIZED:
+            case DownloadService.SOCKET_EVENT_DOWNLOAD_INITIALIZED:
                 this.addDownload(download as IDownload);
                 break;
-            case YoutubeDownloadService.SOCKET_EVENT_DOWNLOAD_UPDATE:
+            case DownloadService.SOCKET_EVENT_DOWNLOAD_UPDATE:
                 this.updateDownload(download as IDownload);
                 break;
-            case YoutubeDownloadService.SOCKET_EVENT_CONNECTED:
+            case DownloadService.SOCKET_EVENT_CONNECTED:
                 this.initDownloads(download as IDownload[]);
                 break;
         }

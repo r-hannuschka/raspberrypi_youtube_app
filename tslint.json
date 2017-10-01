@@ -12,6 +12,7 @@
     ],
     "curly": true,
     "eofline": true,
+    "experimentalDecorators": true,
     "forin": true,
     "import-blacklist": [
       true,

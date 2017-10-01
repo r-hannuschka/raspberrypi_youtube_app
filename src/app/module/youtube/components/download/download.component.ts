@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { IDownload, YoutubeDownloadService } from '../../provider/youtube-download.provider';
+import { IDownload, DownloadService } from '../../provider/download.service';
 
 @Component({
-    selector: 'app-youtube-downloads',
+    selector: 'app-download-component',
     templateUrl: './download.component.html',
     encapsulation: ViewEncapsulation.None,
     styleUrls: ['./download.component.scss']
@@ -15,10 +15,10 @@ export class DownloadComponent implements OnInit {
 
     public currentDownloads: Map<string, number>;
 
-    private downloadService: YoutubeDownloadService;
+    private downloadService: DownloadService;
 
     constructor(
-        downloadService: YoutubeDownloadService,
+        downloadService: DownloadService,
     ) {
         this.downloads = [];
         this.currentDownloads = new Map();

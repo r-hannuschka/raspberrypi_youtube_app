@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-search-bar',
-  templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.scss']
+  selector: 'app-search-component',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
-export class SearchBarComponent implements OnInit {
+export class SearchComponent implements OnInit {
+
+  @Output()
+  search: EventEmitter<string> =  new EventEmitter<string>();
 
   private searchControl: FormControl;
 
@@ -26,11 +29,12 @@ export class SearchBarComponent implements OnInit {
    */
   public onSubmit(query: string)
   {
-
     this.isSend = true;
 
     if ( this.searchControl.valid ) {
-      // init search
+      this.search.emit(this.searchControl.value);
+      this.searchControl.setValue('');
+      this.isSend = false;
     }
   }
 }

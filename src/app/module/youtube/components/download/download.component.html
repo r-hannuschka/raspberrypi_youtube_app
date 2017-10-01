@@ -1,9 +1,4 @@
 <div>
-    <!-- 
-        liste von downloads ( aktiv / abgeschlossen )
-        cancel / entfernen
-        progressbar
-    -->
     <ul class="list-group file-list">
         <li *ngFor="let download of downloads" class="list-group-item d-flex badge-info flex-column">
             <span class="text-primary leading-5 mb-2">{{download.name}}</span>
@@ -20,5 +15,4 @@
             </div>
         </li>
     </ul>
-    <button class="btn btn-default" (click)="downloadVideo()">download</button>
 </div>
