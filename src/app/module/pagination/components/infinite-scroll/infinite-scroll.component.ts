@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Host, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Host, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { PaginationService } from '../../providers/pagination.service';
 import { IPageEvent } from '../../api/page-event.interface';
@@ -10,7 +10,7 @@ import { Observer, Observable } from 'rxjs/Rx';
   templateUrl: './infinite-scroll.component.html',
   styleUrls: ['./infinite-scroll.component.scss']
 })
-export class InfiniteScrollComponent implements AfterViewInit, OnInit {
+export class InfiniteScrollComponent implements OnInit {
 
   @ViewChild('infiniteWrap')
   public contentWrapper: ElementRef;
@@ -21,8 +21,6 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
   public showMore: boolean;
 
   private pagination: PaginationService;
-
-  private wrapperCoordinates;
 
   private page: number;
 
@@ -49,11 +47,6 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
       });
   }
 
-  ngAfterViewInit(): void {
-    this.wrapperCoordinates =
-      this.contentWrapper.nativeElement.getBoundingClientRect();
-  }
-
   public loadNextPage(): void {
     this.showMore = false;
     this.pagination.showNextPage();
@@ -63,15 +56,18 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
    * get observable for window scroll event every 100ms
    *
    * @private
-   * @returns 
+   * @returns
    * @memberof InfiniteScrollComponent
    */
   private getWindowScrollStream() {
+
     return Observable
       .fromEvent(window, 'scroll')
-      .debounceTime(100)
+      .debounceTime(150)
       .map(() => {
-        return window.pageYOffset;
+        const data = this.contentWrapper.nativeElement.getBoundingClientRect();
+        const next = Math.abs(data.top) + window.innerHeight >= data.height - 50;
+        return next;
       });
   }
 
@@ -83,11 +79,8 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
    * @memberof InfiniteScrollComponent
    */
   private handlePaginationEvent(event: IPageEvent) {
-
     if (event.name === PaginationService.UPDATE) {
       this.page = this.pagination.getCurrentPage();
-      this.wrapperCoordinates =
-        this.contentWrapper.nativeElement.getBoundingClientRect();
     }
   }
 
@@ -98,9 +91,11 @@ export class InfiniteScrollComponent implements AfterViewInit, OnInit {
    * @param {number} val
    * @memberof InfiniteScrollComponent
    */
-  private handleWindowScroll(val: number) {
+  private handleWindowScroll( nextpage: boolean) {
+
     this.showMore = false;
-    if ( val > (this.wrapperCoordinates.height + - 10) && this.page === this.pagination.getCurrentPage() ) {
+
+    if ( nextpage && this.page === this.pagination.getCurrentPage() ) {
 
       const loadNextPage: boolean =
         this.autoLoadCount === -1 || this.pagination.getCurrentPage() < this.autoLoadCount;

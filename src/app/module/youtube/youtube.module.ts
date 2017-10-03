@@ -1,38 +1,33 @@
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TruncateModule } from 'ng2-truncate';
 import { PaginationModule } from '../pagination/pagination.module';
+import { SocketModule } from '../socket/socket.module';
+import { VideoListModule, DataProvider } from '../video-list';
 
-import { ApiService } from './provider/api.service';
+import { YoutubeApiProvider } from './provider/youtube-api.provider';
 import { DownloadService } from './provider/download.service';
 
 import { DownloadComponent } from './components/download/download.component';
-import { ListComponent } from './components/list/list.component';
-import { SearchComponent } from '../../components/search/search.component';
+import { FilterComponent } from './components/filter/filter.component';
 import { MainComponent } from './components/main/main.component';
-import { ItemCardComponent } from './components/item/item-card.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     HttpModule,
     PaginationModule,
-    ReactiveFormsModule,
-    TruncateModule
+    SocketModule,
+    VideoListModule
   ],
   providers: [
-    ApiService,
-    DownloadService
+    DownloadService,
+    { provide: DataProvider, useClass: YoutubeApiProvider }
   ],
   declarations: [
     DownloadComponent,
-    ItemCardComponent,
-    ListComponent,
+    FilterComponent,
     MainComponent,
-    SearchComponent
   ],
   exports: [
     MainComponent

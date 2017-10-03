@@ -48,7 +48,7 @@ export class PaginationService {
 
         if ( !this.isConfigured ) {
             this.setData(data, value);
-            this.notifyObserver( {
+            this.notifyObserver({
                 name: PaginationService.CONFIGURED,
                 data: {
                     page: this.getCurrentPage()

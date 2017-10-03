@@ -1,4 +1,4 @@
-import { IItem } from '../../data/item.interface';
+// import { IItem } from '../../data/item.interface';
 
 export interface IResponseList {
     data: {
@@ -6,7 +6,7 @@ export interface IResponseList {
 
         id: string;
 
-        items: IItem[];
+        items: any; // IItem[];
 
         nextPageToken?: string;
 

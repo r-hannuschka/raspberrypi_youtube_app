@@ -1,16 +1,16 @@
 import { Component, HostBinding, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { IItem } from '../../api/data/item.interface';
+// import { IItem } from '../../api/data/item.interface';
 
 @Component({
-  selector: 'app-youtube-item-card',
-  templateUrl: './item-card.component.html',
+  selector: 'app-video-list-item-component',
+  templateUrl: './video-list-item.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./item-card.component.scss']
+  styleUrls: ['./video-list-item.component.scss']
 })
-export class ItemCardComponent implements OnInit {
+export class VideoListItemComponent implements OnInit {
 
   @Input()
-  public item: IItem;
+  public item: any; // IItem;
 
   public description: string;
 
