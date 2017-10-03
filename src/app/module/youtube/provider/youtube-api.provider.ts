@@ -4,8 +4,11 @@ import { Http, Response, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import { IListData, IListItem } from '../../video-list';
+import { IResponseList, IItem } from '../api';
+
 @Injectable()
-export class YoutubeApiProvider extends DataProvider {
+export class YoutubeApiProvider implements DataProvider {
 
   private currentPage = 1;
 
@@ -15,10 +18,15 @@ export class YoutubeApiProvider extends DataProvider {
 
   constructor(
     private httpClient: Http
-  ) {
-    super();
-  }
+  ) {}
 
+  /**
+   * fetch video data from server
+   *
+   * @param {IRequest} req
+   * @returns {Observable<any>}
+   * @memberof YoutubeApiProvider
+   */
   public fetch(req: IRequest): Observable<any>
   {
     let request;
@@ -36,7 +44,15 @@ export class YoutubeApiProvider extends DataProvider {
     return request;
   }
 
-  protected list(param: RequestOptionsArgs): Observable<any>
+  /**
+   *
+   *
+   * @protected
+   * @param {RequestOptionsArgs} param 
+   * @returns {Observable<IListData>} 
+   * @memberof YoutubeApiProvider
+   */
+  public list(param: RequestOptionsArgs): Observable<IListData>
   {
     return this.httpClient
       .get('http://localhost:8080/api/youtube/index/list', param)
@@ -45,7 +61,15 @@ export class YoutubeApiProvider extends DataProvider {
       });
   }
 
-  protected search(options: RequestOptionsArgs)
+  /**
+   *
+   *
+   * @protected
+   * @param {RequestOptionsArgs} options
+   * @returns
+   * @memberof YoutubeApiProvider
+   */
+  public search(options: RequestOptionsArgs)
   {
     const params = options.params as {[key: string]: any};
 
@@ -61,6 +85,14 @@ export class YoutubeApiProvider extends DataProvider {
       });
   }
 
+  /**
+   *
+   *
+   * @private
+   * @param {any} data 
+   * @returns {RequestOptionsArgs} 
+   * @memberof YoutubeApiProvider
+   */
   private createRequestParam(data): RequestOptionsArgs
   {
     const param = Object.assign({}, data);
@@ -76,11 +108,45 @@ export class YoutubeApiProvider extends DataProvider {
     };
   }
 
-  private parseResponse(res) {
-
+  /**
+   * parse youtube response list
+   *
+   * @private
+   * @param {IResponseList} res
+   * @returns {IListData}
+   * @memberof YoutubeApiProvider
+   */
+  private parseResponse(res: IResponseList): IListData {
     this.nextPageToken = res.data.nextPageToken;
     this.prevPageToken = res.data.prevPageToken;
 
-    return res;
+    const response: IListData = {
+      pageItemCount: res.data.pageInfo.resultsPerPage,
+      totalItemCount: res.data.pageInfo.totalResults,
+      items: []
+    };
+
+    res.data.items.forEach( (item: IItem) => {
+      const itemData: IListItem = {
+        description: item.snippet.description || '',
+        id: item.id,
+        title: item.snippet.title || 'youtube video#' + item.id,
+        thumbnail: ''
+      };
+
+      const thumbnailSizes = ['medium', 'high', 'maxres'];
+
+      for ( let x = 0, ln = thumbnailSizes.length; x < ln; x++ ) {
+        const resolution = thumbnailSizes[x];
+        if (item.snippet.thumbnails.hasOwnProperty(resolution) ) {
+          itemData.thumbnail = item.snippet.thumbnails[resolution].url;
+          break;
+        }
+      }
+
+      response.items.push(itemData)
+    });
+
+    return response;
   }
 }

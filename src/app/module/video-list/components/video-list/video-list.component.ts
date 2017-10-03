@@ -4,10 +4,7 @@ import { IPageEvent } from '../../../../module/pagination/api/page-event.interfa
 
 import { DataProvider } from '../../provider/data.provider';
 
-/*
-import { IItem } from '../../api/data/item.interface';
-import { IResponseList } from '../../api/http/response/response-list.interface';
-*/
+import { IListData, IListItem } from '../../api';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -20,7 +17,7 @@ export class VideoListComponent implements OnInit {
 
   public isLoading = false;
 
-  private items: any[] = []; // IItem[] = [];
+  private items: IListItem[] = [];
 
   private resetList: boolean;
 
@@ -76,7 +73,7 @@ export class VideoListComponent implements OnInit {
 
     this.dataProvider
       .fetch(request)
-      .subscribe((res: any /*IResponseList*/) => {
+      .subscribe((res: IListData) => {
         // clear list
         this.handleResponse(res);
       });
@@ -91,26 +88,23 @@ export class VideoListComponent implements OnInit {
    * @param {IResponseList} res
    * @memberof ListComponent
    */
-  private handleResponse(res: any /*IResponseList*/) {
+  private handleResponse(listData: IListData) {
 
-    if (res.success) {
-
-      const paginationData = {
-        itemPageCount: res.data.pageInfo.resultsPerPage,
-        itemTotalCount: res.data.pageInfo.totalResults
-      }
-
-      if ( this.resetList ) {
-        this.items = [];
-        paginationData['currentPage'] = 1;
-        this.resetList = false;
-      }
-
-      this.items = this.items.concat(res.data.items);
-      this.isLoading = false;
-
-      this.pagination.update(paginationData);
+    const paginationData = {
+      itemPageCount: listData.pageItemCount,
+      itemTotalCount: listData.totalItemCount
     }
+
+    if ( this.resetList ) {
+      this.items = [];
+      paginationData['currentPage'] = 1;
+      this.resetList = false;
+    }
+
+    this.items = this.items.concat(listData.items);
+    this.isLoading = false;
+
+    this.pagination.update(paginationData);
   }
 
   /**

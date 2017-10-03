@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input, OnInit, ViewEncapsulation } from '@angular/core';
-// import { IItem } from '../../api/data/item.interface';
+import { IListItem } from '../../api';
 
 @Component({
   selector: 'app-video-list-item-component',
@@ -10,19 +10,10 @@ import { Component, HostBinding, Input, OnInit, ViewEncapsulation } from '@angul
 export class VideoListItemComponent implements OnInit {
 
   @Input()
-  public item: any; // IItem;
-
-  public description: string;
-
-  public title: string;
-
-  public thumbUrl: string;
+  public item: IListItem;
 
   constructor() {}
 
   ngOnInit() {
-    this.description = this.item.snippet.description;
-    this.title = this.item.snippet.title;
-    this.thumbUrl = this.item.snippet.thumbnails.medium.url;
   }
 }

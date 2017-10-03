@@ -1,4 +1,5 @@
 import { Observable} from 'rxjs/Observable';
+import { IListData } from '../api/list-data.interface';
 
 export interface IRequest {
 
@@ -13,6 +14,5 @@ export  abstract class DataProvider {
 
     public static readonly ACTION_GET = 'get';
 
-    // @todo Observable should return list data
-    public abstract fetch(req: IRequest): Observable<any>;
+    public abstract fetch(req: IRequest): Observable<IListData>;
 }
