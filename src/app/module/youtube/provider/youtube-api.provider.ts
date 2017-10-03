@@ -89,15 +89,18 @@ export class YoutubeApiProvider implements DataProvider {
    *
    *
    * @private
-   * @param {any} data 
-   * @returns {RequestOptionsArgs} 
+   * @param {any} data
+   * @returns {RequestOptionsArgs}
    * @memberof YoutubeApiProvider
    */
   private createRequestParam(data): RequestOptionsArgs
   {
     const param = Object.assign({}, data);
 
-    if ( param.page && param.page !== this.currentPage ) {
+    const currentPage = this.currentPage;
+    this.currentPage = 1;
+
+    if ( param.page && param.page !== currentPage ) {
       param.pageToken = param.page > this.currentPage ? this.nextPageToken : this.prevPageToken;
       this.currentPage = param.page;
       delete param.page;
