@@ -15,6 +15,8 @@ export class PaginationService {
 
     private currentPage: number;
 
+    private disabled: boolean;
+
     private itemTotalCount: number;
 
     private itemPageCount: number;
@@ -45,7 +47,6 @@ export class PaginationService {
      * @param {number} [value]
      */
     public configure(data: IConfig | string, value?: number): void {
-
         if ( !this.isConfigured ) {
             this.setData(data, value);
             this.notifyObserver({
@@ -56,6 +57,14 @@ export class PaginationService {
             });
             this.isConfigured = true;
         }
+    }
+
+    public disable(disable: boolean) {
+        this.disabled = disable;
+    }
+
+    public isDisabled(): boolean {
+        return this.disabled;
     }
 
     /**
@@ -103,7 +112,6 @@ export class PaginationService {
     public showPage(page: number): void {
 
         let validPage = false;
-
         validPage = this.pageCount >= page;
         validPage = validPage && page > 0;
 

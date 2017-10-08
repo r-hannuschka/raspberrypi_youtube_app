@@ -22,8 +22,6 @@ export class InfiniteScrollComponent implements OnInit {
 
   private pagination: PaginationService;
 
-  private page: number;
-
   constructor(
     @Host() pagination: PaginationService
   ) {
@@ -32,13 +30,7 @@ export class InfiniteScrollComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.page = this.pagination.getCurrentPage();
     this.showMore = false;
-
-    // register pagniation events
-    this.pagination
-      .getNotifier()
-      .subscribe((event: IPageEvent) => this.handlePaginationEvent(event));
 
     // register window scroll event
     this.getWindowScrollStream()
@@ -65,23 +57,13 @@ export class InfiniteScrollComponent implements OnInit {
       .fromEvent(window, 'scroll')
       .debounceTime(150)
       .map(() => {
-        const data = this.contentWrapper.nativeElement.getBoundingClientRect();
-        const next = Math.abs(data.top) + window.innerHeight >= data.height - 50;
-        return next;
+        let loadNextPage = false;
+        if ( ! this.pagination.isDisabled() ) {
+          const data = this.contentWrapper.nativeElement.getBoundingClientRect();
+          loadNextPage = Math.abs(data.top) + window.innerHeight >= data.height - 100;
+        }
+        return loadNextPage;
       });
-  }
-
-  /**
-   * handle pagination service event
-   *
-   * @private
-   * @param {IPageEvent} event
-   * @memberof InfiniteScrollComponent
-   */
-  private handlePaginationEvent(event: IPageEvent) {
-    if (event.name === PaginationService.UPDATE) {
-      this.page = this.pagination.getCurrentPage();
-    }
   }
 
   /**
@@ -92,10 +74,9 @@ export class InfiniteScrollComponent implements OnInit {
    * @memberof InfiniteScrollComponent
    */
   private handleWindowScroll( nextpage: boolean) {
-
     this.showMore = false;
 
-    if ( nextpage && this.page === this.pagination.getCurrentPage() ) {
+    if ( nextpage ) {
 
       const loadNextPage: boolean =
         this.autoLoadCount === -1 || this.pagination.getCurrentPage() < this.autoLoadCount;

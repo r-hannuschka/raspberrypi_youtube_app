@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { PaginationService } from '../../../pagination/providers/pagination.service';
 import { IPageEvent } from '../../../pagination/api/page-event.interface';
-import { IItem } from '../../api/data/item.interface';
-import { IResponseList } from '../../api/http/response/response-list.interface';
+import { IItem, IListItem, IResponseList } from '../../api';
 import { ApiService } from '../../provider/api.service';
 import { ListDataModel } from '../../model/list-data.model';
 
@@ -17,7 +17,7 @@ export class ListComponent implements OnInit {
 
   public isLoading = false;
 
-  private items: IItem[] = [];
+  private items: IListItem[] = [];
 
   private listDataModel: ListDataModel;
 
@@ -45,10 +45,14 @@ export class ListComponent implements OnInit {
         this.handlePagniationEvent(event);
       });
 
-    // initial oder bei suche
-    this.apiService
-      .list().subscribe((res: IResponseList) => {
-        this.handleResponse(res);
+    this.fetchData()
+      .subscribe((items: IListItem[]) => {
+        this.items = items;
+        this.pagination.configure({
+          currentPage: 1,
+          itemPageCount: this.listDataModel.getItemPageCount(),
+          itemTotalCount: this.listDataModel.getItemTotalCount()
+        });
       });
   }
 
@@ -62,34 +66,47 @@ export class ListComponent implements OnInit {
     this.listDataModel.setPage(1);
 
     this.fetchData()
-      .subscribe( (res: IResponseList) => {
-        this.updatePagination();
+      .subscribe((items: IListItem[]) => {
+        this.items = items;
+        // items not added yet
+        window.setTimeout(() => {
+        }, 100);
       });
   }
 
-  private fetchData() {
-
+  /**
+   *
+   *
+   * @private
+   * @returns
+   * @memberof ListComponent
+   */
+  private fetchData(): Observable<IListItem[]> {
     const param: any = {};
+    this.isLoading = true;
+    this.pagination.disable(true);
 
     let searchQuery = this.listDataModel.getSearchQuery();
     let request: any;
 
+    // trim search query
     searchQuery = searchQuery.replace(/\s*(.*?)\s*$/, '$1');
 
     // check page
-    if ( this.listDataModel.getPage() !== 1 ) {
+    if (this.listDataModel.getPage() !== 1) {
       param['pageToken'] = this.listDataModel.getNextPageToken()
     }
 
-    if ( searchQuery.length ) {
+    if (searchQuery.length) {
       param['q'] = searchQuery;
-      request = this.apiService.search(param)
+      request = this.apiService.search(param);
     } else {
       request = this.apiService.list(param);
     }
 
-    return request.map( (res: IResponseList) => {
+    return request.map((res: IResponseList) => {
       this.isLoading = false;
+      this.pagination.disable(false);
       return this.handleResponse(res);
     });
   }
@@ -100,9 +117,14 @@ export class ListComponent implements OnInit {
    * @memberof ListComponent
    */
   private handlePagniationEvent(event: IPageEvent) {
-    this.listDataModel.setPage(event.data.page);
-    this.fetchData().subscribe( () => {
-    });
+
+    if (event.name === PaginationService.DISPLAY_PAGE) {
+      this.listDataModel.setPage(event.data.page);
+
+      this.fetchData().subscribe((items: IListItem[]) => {
+        this.items = this.items.concat(items);
+      });
+    }
   }
 
   /**
@@ -114,28 +136,46 @@ export class ListComponent implements OnInit {
    */
   private handleResponse(res: IResponseList) {
 
+    const items: IListItem[] = [];
+
     if (res.success) {
-      this.listDataModel.setNextPageToken( res.data.nextPageToken );
-      this.listDataModel.setPrevPageToken( res.data.prevPageToken );
-      this.listDataModel.setItemPageCount( res.data.pageInfo.resultsPerPage );
-      this.listDataModel.setItemTotalCount( res.data.pageInfo.totalResults );
 
-      /**
-       * prepare items
-       */
-      this.listDataModel.setItems();
+      this.listDataModel.setNextPageToken(res.data.nextPageToken);
+      this.listDataModel.setPrevPageToken(res.data.prevPageToken);
+      this.listDataModel.setItemPageCount(res.data.pageInfo.resultsPerPage);
+      this.listDataModel.setItemTotalCount(res.data.pageInfo.totalResults);
 
-      // könnten die items nun noch umwandeln
-      this.items = this.items.concat(res.data.items);
+      res.data.items.forEach((responseItem: IItem) => {
+        const item: IListItem = {
+          description: responseItem.snippet.description || '',
+          id: responseItem.id,
+          title: responseItem.snippet.title || 'youtube video#' + responseItem.id,
+          thumbnail: ''
+        };
+
+        const thumbnailSizes = ['medium', 'high', 'maxres'];
+
+        for (let x = 0, ln = thumbnailSizes.length; x < ln; x++) {
+          const resolution = thumbnailSizes[x];
+          if (responseItem.snippet.thumbnails.hasOwnProperty(resolution)) {
+            item.thumbnail = responseItem.snippet.thumbnails[resolution].url;
+            break;
+          }
+        }
+
+        items.push(item);
+      });
     }
+
+    return items;
   }
 
   private updatePagination() {
-      // reset pagination
-      this.pagination.update({
-        currentPage   : this.listDataModel.getPage(),
-        itemPageCount : this.listDataModel.getItemPageCount(),
-        itemTotalCount: this.listDataModel.getItemTotalCount()
-      });
+    // reset pagination
+    this.pagination.update({
+      currentPage: this.listDataModel.getPage(),
+      itemPageCount: this.listDataModel.getItemPageCount(),
+      itemTotalCount: this.listDataModel.getItemTotalCount()
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { IItem } from '../../data/item.interface';
+import { IItem } from './item.interface';
 
 export interface IResponseList {
     data: {

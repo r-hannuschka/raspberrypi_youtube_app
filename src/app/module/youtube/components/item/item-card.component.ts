@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { IItem } from '../../api/data/item.interface';
+import { IListItem } from '../../api';
 
 @Component({
   selector: 'app-youtube-item-card',
@@ -10,19 +10,10 @@ import { IItem } from '../../api/data/item.interface';
 export class ItemCardComponent implements OnInit {
 
   @Input()
-  public item: IItem;
-
-  public description: string;
-
-  public title: string;
-
-  public thumbUrl: string;
+  public item: IListItem;
 
   constructor() {}
 
   ngOnInit() {
-    this.description = this.item.snippet.description;
-    this.title = this.item.snippet.title;
-    this.thumbUrl = this.item.snippet.thumbnails.medium.url;
   }
 }
