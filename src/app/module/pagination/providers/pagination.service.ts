@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { IPageEvent } from '../api/page-event.interface';
+import { IConfig, IPageEvent } from '../api';
 
 @Injectable()
 export class PaginationService {
@@ -44,7 +44,7 @@ export class PaginationService {
      * @param {({} | string)} data
      * @param {number} [value]
      */
-    public configure(data: {} | string, value?: number): void {
+    public configure(data: IConfig | string, value?: number): void {
 
         if ( !this.isConfigured ) {
             this.setData(data, value);
@@ -133,7 +133,7 @@ export class PaginationService {
      * @param {({} | string)} data
      * @param {number} [value]
      */
-    public update(data: {} | string, value?: number): void {
+    public update(data: IConfig | string, value?: number): void {
         this.setData(data, value);
         this.notifyObserver({
             name: PaginationService.UPDATE,
