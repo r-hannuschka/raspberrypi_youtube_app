@@ -86,16 +86,16 @@ export class ListComponent implements OnInit {
     this.isLoading = true;
     this.pagination.disable(true);
 
-    let searchQuery = this.listDataModel.getSearchQuery();
     let request: any;
 
     // trim search query
-    searchQuery = searchQuery.replace(/\s*(.*?)\s*$/, '$1');
 
     // check page
     if (this.listDataModel.getPage() !== 1) {
       param['pageToken'] = this.listDataModel.getNextPageToken()
     }
+
+    const searchQuery = this.listDataModel.getSearchQuery().replace(/\s*(.*?)\s*$/, '$1');
 
     if (searchQuery.length) {
       param['q'] = searchQuery;
