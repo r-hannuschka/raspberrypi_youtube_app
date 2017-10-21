@@ -6,16 +6,26 @@ import { IItem, IListItem, IResponseList } from '../../api';
 import { ApiService } from '../../provider/api.service';
 import { ListDataModel } from '../../model/list-data.model';
 
+import { IFilter } from '../../../filter/api/filter.interface';
+import { FilterFactory } from '../../../filter/model/filter.factory';
+import { FilterService } from '../../../filter/provider/filter.service';
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'app-youtube-list',
   styleUrls: ['./list.component.scss'],
   templateUrl: './list.component.html',
-  viewProviders: [PaginationService]
+  viewProviders: [PaginationService, FilterService]
 })
 export class ListComponent implements OnInit {
 
   public isLoading = false;
+
+  public filters: IFilter[];
+
+  public isFilterActive = false;
+
+  private filterFactory: FilterFactory;
 
   private items: IListItem[] = [];
 
@@ -26,8 +36,12 @@ export class ListComponent implements OnInit {
     private apiService: ApiService
   ) {
     this.listDataModel = new ListDataModel();
+    this.filterFactory = FilterFactory.getInstance();
+
     this.listDataModel.setPage(1);
     this.listDataModel.setSearchQuery('');
+
+    this.filters = this.createFilter();
   }
 
   /**
@@ -56,6 +70,9 @@ export class ListComponent implements OnInit {
       });
   }
 
+  public onApplyFilter(filters) {
+  }
+
   /**
    *
    * @param {string} query
@@ -68,10 +85,45 @@ export class ListComponent implements OnInit {
     this.fetchData()
       .subscribe((items: IListItem[]) => {
         this.items = items;
-        // items not added yet
-        window.setTimeout(() => {
-        }, 100);
+        this.updatePagination();
       });
+  }
+
+  /**
+   * toggle filter visibility mode
+   *
+   * @memberof ListComponent
+   */
+  public toggleFilterDisplay() {
+    this.isFilterActive = !this.isFilterActive;
+  }
+
+  /**
+   *
+   *
+   * @private
+   * @returns {IFilter[]}
+   * @memberof ListComponent
+   */
+  private createFilter(): IFilter[] {
+
+    const videoDefinitionFilter: IFilter = this.filterFactory.createSelectFilter(
+      'videoDefinition', 'Auflösung', [
+        { label: 'mittel', value: 'standard' },
+        { label: 'hoch', value: 'high' }
+      ]);
+
+    const videoDurationFilter: IFilter = this.filterFactory.createSelectFilter(
+      'videoDuration', 'Länge', [
+        { label: 'kurz (max 4min)', value: 'short' },
+        { label: 'medium (max 20 min)', value: 'medium' },
+        { label: 'lang (20+ min)', value: 'long' }
+      ]);
+
+    return [
+      videoDefinitionFilter,
+      videoDurationFilter
+    ];
   }
 
   /**
@@ -82,20 +134,19 @@ export class ListComponent implements OnInit {
    * @memberof ListComponent
    */
   private fetchData(): Observable<IListItem[]> {
+
     const param: any = {};
+    const searchQuery = this.listDataModel.getSearchQuery().replace(/\s*(.*?)\s*$/, '$1');
+
     this.isLoading = true;
     this.pagination.disable(true);
 
     let request: any;
 
-    // trim search query
-
     // check page
     if (this.listDataModel.getPage() !== 1) {
       param['pageToken'] = this.listDataModel.getNextPageToken()
     }
-
-    const searchQuery = this.listDataModel.getSearchQuery().replace(/\s*(.*?)\s*$/, '$1');
 
     if (searchQuery.length) {
       param['q'] = searchQuery;
@@ -109,6 +160,47 @@ export class ListComponent implements OnInit {
       this.pagination.disable(false);
       return this.handleResponse(res);
     });
+  }
+
+  /**
+   * handle list response
+   *
+   * @private
+   * @param {IResponseList} res
+   * @memberof ListComponent
+   */
+  private handleResponse(res: IResponseList) {
+
+    const items: IListItem[] = [];
+    const thumbnailSizes = ['medium', 'high', 'maxres'];
+
+    if (res.success) {
+      this.listDataModel.setNextPageToken(res.data.nextPageToken);
+      this.listDataModel.setPrevPageToken(res.data.prevPageToken);
+      this.listDataModel.setItemPageCount(res.data.pageInfo.resultsPerPage);
+      this.listDataModel.setItemTotalCount(res.data.pageInfo.totalResults);
+
+      res.data.items.forEach((responseItem: IItem) => {
+        const item: IListItem = {
+          description: responseItem.snippet.description || '',
+          id: responseItem.id,
+          title: responseItem.snippet.title || 'youtube video#' + responseItem.id,
+          thumbnail: ''
+        };
+
+        for (let x = 0, ln = thumbnailSizes.length; x < ln; x++) {
+          const resolution = thumbnailSizes[x];
+          if (responseItem.snippet.thumbnails.hasOwnProperty(resolution)) {
+            item.thumbnail = responseItem.snippet.thumbnails[resolution].url;
+            break;
+          }
+        }
+
+        items.push(item);
+      });
+    }
+
+    return items;
   }
 
   /**
@@ -128,48 +220,11 @@ export class ListComponent implements OnInit {
   }
 
   /**
-   * handle list response
+   *
    *
    * @private
-   * @param {IResponseList} res
    * @memberof ListComponent
    */
-  private handleResponse(res: IResponseList) {
-
-    const items: IListItem[] = [];
-
-    if (res.success) {
-
-      this.listDataModel.setNextPageToken(res.data.nextPageToken);
-      this.listDataModel.setPrevPageToken(res.data.prevPageToken);
-      this.listDataModel.setItemPageCount(res.data.pageInfo.resultsPerPage);
-      this.listDataModel.setItemTotalCount(res.data.pageInfo.totalResults);
-
-      res.data.items.forEach((responseItem: IItem) => {
-        const item: IListItem = {
-          description: responseItem.snippet.description || '',
-          id: responseItem.id,
-          title: responseItem.snippet.title || 'youtube video#' + responseItem.id,
-          thumbnail: ''
-        };
-
-        const thumbnailSizes = ['medium', 'high', 'maxres'];
-
-        for (let x = 0, ln = thumbnailSizes.length; x < ln; x++) {
-          const resolution = thumbnailSizes[x];
-          if (responseItem.snippet.thumbnails.hasOwnProperty(resolution)) {
-            item.thumbnail = responseItem.snippet.thumbnails[resolution].url;
-            break;
-          }
-        }
-
-        items.push(item);
-      });
-    }
-
-    return items;
-  }
-
   private updatePagination() {
     // reset pagination
     this.pagination.update({

@@ -1,10 +1,27 @@
-<app-search-component (search)="handleSearch($event)"></app-search-component>
+<div class="list-header mt-4 mb-4">
 
-<app-pagination-infinite-scroll [autoLoadCount]=3 >
-    <div class="container">
-        <div class="card-group">
-            <app-youtube-item-card *ngFor="let item of items" [item]="item"></app-youtube-item-card>
+    <div class="row">
+        <div class="col-10">
+            <app-search-component (search)="handleSearch($event)"></app-search-component>
         </div>
+        <div class="col-2 d-flex flex-column align-items-stretch">
+            <button class="btn btn-primary" (click)="toggleFilterDisplay()">
+                <i class="fa fa-filter float-left"></i>
+                Filter
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <app-filter-component *ngIf="isFilterActive" [filters]="filters"></app-filter-component>
+        </div>
+    </div>
+</div>
+
+<app-pagination-infinite-scroll [autoLoadCount]=3>
+    <div class="card-group">
+        <app-youtube-item-card *ngFor="let item of items" [item]="item"></app-youtube-item-card>
     </div>
 </app-pagination-infinite-scroll>
 

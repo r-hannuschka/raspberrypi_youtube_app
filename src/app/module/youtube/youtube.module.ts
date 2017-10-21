@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TruncateModule } from 'ng2-truncate';
 import { PaginationModule } from '../pagination/pagination.module';
+import { FilterModule } from '../filter/filter.module';
 
 import { ApiService } from './provider/api.service';
 import { DownloadService } from './provider/download.service';
@@ -17,6 +18,7 @@ import { ItemCardComponent } from './components/item/item-card.component';
 @NgModule({
   imports: [
     CommonModule,
+    FilterModule,
     FormsModule,
     HttpModule,
     PaginationModule,

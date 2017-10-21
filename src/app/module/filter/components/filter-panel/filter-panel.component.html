@@ -1,0 +1,20 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-lg-3" *ngFor="let activeFilter of activeFilters">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-3" *ngFor="let filter of filters" [ngSwitch]="filter.getType()">
+      <!-- SELECT FILTER COMPONENT -->
+      <app-select-filter-component *ngSwitchCase="'select'" [model]="filter"></app-select-filter-component>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-success float-md-right" (click)="applyFilter()">apply filter</button>
+    </div>
+  </div>
+</div>

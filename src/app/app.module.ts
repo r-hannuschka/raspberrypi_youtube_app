@@ -6,7 +6,6 @@ import { YoutubeModule } from './module/youtube/youtube.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +15,6 @@ import { NavComponent } from './components/nav/nav.component';
     BrowserModule,
     YoutubeModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
