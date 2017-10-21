@@ -12,24 +12,26 @@ export abstract class Filter implements IFilter {
 
     private active: boolean;
 
-    public setName(name: string) {
-        this.name = name;
-    }
+    private initialValue: any = '';
 
-    public setValue(value: string | number) {
-        this.value = value;
-    }
-
-    public setLabel(label: string) {
-        this.label = label;
+    public isActive(): boolean {
+        return this.active;
     }
 
     public setActive(active: boolean) {
         this.active = active;
     }
 
-    public isActive(): boolean {
-        return this.active;
+    public setLabel(label: string) {
+        this.label = label;
+    }
+
+    public setName(name: string) {
+        this.name = name;
+    }
+
+    public setValue(value: string | number) {
+        this.value = value;
     }
 
     public getType(): string {
@@ -46,5 +48,10 @@ export abstract class Filter implements IFilter {
 
     public getValue(): string | number {
         return this.value;
+    }
+
+    public reset(): void {
+        this.setValue('');
+        this.setActive(false);
     }
 }

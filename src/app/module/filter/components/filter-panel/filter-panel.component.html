@@ -1,13 +1,18 @@
 <div class="container-fluid">
 
   <div class="row">
-    <div class="col-lg-3" *ngFor="let activeFilter of activeFilters">
+    <div class="navbar">
+      <button class="btn btn-warning btn-labeled mr-2" *ngFor="let filter of activeFilters" (click)="removeFilter(filter)">
+        <span class="btn-label">
+          <i class="fa fa-close"></i>
+        </span>
+        {{filter.getLabel()}}
+      </button>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-6 col-lg-3" *ngFor="let filter of filters" [ngSwitch]="filter.getType()">
-      <!-- SELECT FILTER COMPONENT -->
       <app-select-filter-component *ngSwitchCase="'select'" [model]="filter"></app-select-filter-component>
     </div>
   </div>

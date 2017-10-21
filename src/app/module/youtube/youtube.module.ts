@@ -10,10 +10,10 @@ import { ApiService } from './provider/api.service';
 import { DownloadService } from './provider/download.service';
 
 import { DownloadComponent } from './components/download/download.component';
-import { ListComponent } from './components/list/list.component';
 import { SearchComponent } from '../../components/search/search.component';
-import { MainComponent } from './components/main/main.component';
 import { ItemCardComponent } from './components/item/item-card.component';
+import { ListComponent } from './components/list/list.component';
+import { MainComponent } from './components/main/main.component';
 
 @NgModule({
   imports: [

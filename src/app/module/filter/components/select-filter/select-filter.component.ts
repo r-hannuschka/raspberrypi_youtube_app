@@ -41,15 +41,15 @@ export class SelectFilterComponent implements OnInit {
   public onSelect(value) {
     const val = value.replace(/^\s*(.*?)\s*$/, '\$1');
 
+    this.model.setValue(val);
+
     if (val !== '') {
-       this.filterService.setFilter(this.name, value);
+       this.filterService.setFilter(this.model);
     } else {
-      this.filterService.removeFilter(this.name);
+      this.filterService.unsetFilter(this.model);
     }
 
-    this.model.setValue(val);
     this.value = val;
-
     this.select.emit(val);
   }
 }

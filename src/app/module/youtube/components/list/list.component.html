@@ -1,10 +1,10 @@
 <div class="list-header mt-4 mb-4">
 
     <div class="row">
-        <div class="col-10">
+        <div [ngClass]="isSearch ? 'col-10': 'col-12'" >
             <app-search-component (search)="handleSearch($event)"></app-search-component>
         </div>
-        <div class="col-2 d-flex flex-column align-items-stretch">
+        <div class="col-2 d-flex flex-column align-items-stretch" *ngIf="isSearch">
             <button class="btn btn-primary" (click)="toggleFilterDisplay()">
                 <i class="fa fa-filter float-left"></i>
                 Filter
@@ -12,9 +12,9 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="isFilterActive">
         <div class="col-12">
-            <app-filter-component *ngIf="isFilterActive" [filters]="filters"></app-filter-component>
+            <app-filter-component [filters]="filters" (apply)="onApplyFilter()" (remove)="onRemoveFilter()"></app-filter-component>
         </div>
     </div>
 </div>

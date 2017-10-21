@@ -15,7 +15,7 @@ import { FilterService } from '../../../filter/provider/filter.service';
   selector: 'app-youtube-list',
   styleUrls: ['./list.component.scss'],
   templateUrl: './list.component.html',
-  viewProviders: [PaginationService, FilterService]
+  viewProviders: [PaginationService]
 })
 export class ListComponent implements OnInit {
 
@@ -31,9 +31,18 @@ export class ListComponent implements OnInit {
 
   private listDataModel: ListDataModel;
 
+  /**
+   * we actually searching
+   *
+   * @private
+   * @memberof ListComponent
+   */
+  private isSearch = false;
+
   constructor(
-    private pagination: PaginationService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private filterService: FilterService,
+    private pagination: PaginationService
   ) {
     this.listDataModel = new ListDataModel();
     this.filterFactory = FilterFactory.getInstance();
@@ -71,6 +80,13 @@ export class ListComponent implements OnInit {
   }
 
   public onApplyFilter(filters) {
+    this.reloadList()
+      .subscribe();
+  }
+
+  public onRemoveFilter() {
+    this.reloadList()
+      .subscribe();
   }
 
   /**
@@ -79,13 +95,18 @@ export class ListComponent implements OnInit {
    * @memberof ListComponent
    */
   public handleSearch(query: string) {
+
     this.listDataModel.setSearchQuery(query);
     this.listDataModel.setPage(1);
+    this.filterService.clearFilter();
 
-    this.fetchData()
-      .subscribe((items: IListItem[]) => {
-        this.items = items;
-        this.updatePagination();
+    if ( this.isFilterActive ) {
+      this.toggleFilterDisplay();
+    }
+
+    this.reloadList()
+      .subscribe( (items: IListItem[]) => {
+        this.isSearch = true;
       });
   }
 
@@ -126,6 +147,17 @@ export class ListComponent implements OnInit {
     ];
   }
 
+  private reloadList() {
+    this.listDataModel.setPage(1);
+
+    return this.fetchData()
+      .map((items: IListItem[]) => {
+        this.items = items;
+        this.updatePagination();
+        return items;
+      });
+  }
+
   /**
    *
    *
@@ -135,8 +167,12 @@ export class ListComponent implements OnInit {
    */
   private fetchData(): Observable<IListItem[]> {
 
-    const param: any = {};
+    let param: any = {};
     const searchQuery = this.listDataModel.getSearchQuery().replace(/\s*(.*?)\s*$/, '$1');
+    const filters = this.getFilters();
+
+    // add filters to params
+    param = Object.assign(filters);
 
     this.isLoading = true;
     this.pagination.disable(true);
@@ -160,6 +196,23 @@ export class ListComponent implements OnInit {
       this.pagination.disable(false);
       return this.handleResponse(res);
     });
+  }
+
+  /**
+   *
+   *
+   * @private
+   * @returns {{[key: string]: any}} filters
+   * @memberof ListComponent
+   */
+  private getFilters(): {[key: string]: any} {
+    const activeFilters = this.filterService.getActiveFilters();
+    const filters: {[key: string]: any} = {};
+    activeFilters.forEach( (filter: IFilter) => {
+      filters[filter.getName()] = filter.getValue();
+    });
+
+    return filters;
   }
 
   /**
@@ -232,5 +285,15 @@ export class ListComponent implements OnInit {
       itemPageCount: this.listDataModel.getItemPageCount(),
       itemTotalCount: this.listDataModel.getItemTotalCount()
     });
+  }
+
+  /**
+   *
+   *
+   * @private
+   * @memberof ListComponent
+   */
+  private resetPage() {
+    this.listDataModel.setPage(0);
   }
 }

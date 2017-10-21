@@ -10,6 +10,8 @@ export interface IFilter {
 
     getType(): string;
 
+    reset(): void;
+
     setActive(active: boolean);
 
     setValue(value: any);

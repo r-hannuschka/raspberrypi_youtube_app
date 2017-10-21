@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IFilter } from '../../api/filter.interface';
+import { IFilterResponse } from '../../api/filter-response.interface';
 import { FilterService } from '../../provider/filter.service';
 
 @Component({
@@ -12,32 +13,42 @@ export class FilterPanelComponent implements OnInit {
   public filters: IFilter[];
 
   @Output('apply')
-  public apply: EventEmitter<{[key: string]: any}[]>;
+  public apply: EventEmitter<IFilter[]>;
+
+  @Output('remove')
+  public remove: EventEmitter<IFilter[]>;
 
   private filterService: FilterService;
+
+  private activeFilters: IFilter[];
 
   constructor(filterService: FilterService) {
     this.filterService = filterService;
     this.apply = new EventEmitter();
+    this.remove = new EventEmitter();
   }
 
   ngOnInit() {
+    this.activeFilters = this.filterService.getActiveFilters();
+  }
+
+  public removeFilter(filter: IFilter) {
+    this.filterService.deactivateFilter(filter);
+    this.activeFilters = this.filterService.getActiveFilters();
+    this.remove.emit([].concat(filter));
   }
 
   public applyFilter() {
 
-    /*
-    const filters = this.filterService.getFilters().reduce( (active, filter) => {
-      active.push(filter[0]);
-      return active;
-    }, []);
+    const filtersSet = this.filterService.getFiltersSet();
+    const activateFilter: IFilter[] = [];
 
-    this.filters.forEach(filter => {
-      filter.setActive( filters.indexOf (filter.getName() ) > -1 );
+    filtersSet.forEach( (filter: IFilter) => {
+      activateFilter.push(filter);
     });
-    */
 
-    this.apply.emit(
-      this.filterService.getFilters());
+    this.filterService.activateFilters(activateFilter);
+    this.activeFilters = this.filterService.getActiveFilters();
+    this.apply.emit(this.filterService.getActiveFilters());
   }
 }
