@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
+import { Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TruncateModule } from 'ng2-truncate';
 import { PaginationModule } from '../pagination/pagination.module';
@@ -30,14 +31,17 @@ import { MainComponent } from './components/main/main.component';
     DownloadService
   ],
   declarations: [
-    DownloadComponent,
     ItemCardComponent,
     ListComponent,
     MainComponent,
     SearchComponent
   ],
+  entryComponents: [
+    MainComponent
+  ],
   exports: [
     MainComponent
   ]
 })
-export class YoutubeModule { }
+export class YoutubeModule {
+}

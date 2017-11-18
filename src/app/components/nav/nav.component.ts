@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { IMenuItem } from '../../api/menu-item.interface';
 
 @Component({
   selector: 'app-nav',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
-  constructor() { }
+  public menuItems: IMenuItem[];
+
+  constructor( @Inject('MenuItems') menuItems: IMenuItem[] ) {
+    this.menuItems = menuItems;
+  }
 
   ngOnInit() {
   }

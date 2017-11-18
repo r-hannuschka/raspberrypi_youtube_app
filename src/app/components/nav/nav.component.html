@@ -1,3 +1,15 @@
-<nav class="navbar navbar navbar-light bg-primary bg-faded">
-  <a class="navbar-brand" href="#">we need a design</a>
+<nav class="navbar navbar-expand navbar-light bg-primary bg-faded">
+  <a class="navbar-brand" routerLink="/" >
+    Raspberry Pi - Video
+  </a>
+  <div class="navbar-nav">
+    <a
+       routerLink="/{{menuItem.route}}"
+       [ngClass]="['nav-item','nav-link',menuItem.class].join(' ')" 
+       *ngFor="let menuItem of menuItems">
+
+      <i *ngIf="menuItem.iconClass" [ngClass]="menuItem.iconClass"></i>
+      {{menuItem.title}}
+    </a>
+  </div>
 </nav>
