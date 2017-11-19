@@ -1,0 +1,8 @@
+<ng-template #actions let-item>
+  <button class="btn" (click)="downloadVideo(item)">
+    <i class="fa fa-download">Download</i>
+  </button>
+</ng-template>
+
+<app-youtube-list [actions]="actions">
+</app-youtube-list>

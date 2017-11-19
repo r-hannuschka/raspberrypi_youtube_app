@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { IDownload, DownloadService } from '../../provider/download.service';
+import { IDownload, DownloadService } from '../../module/youtube';
 
 @Component({
     selector: 'app-download-component',
@@ -27,15 +27,6 @@ export class DownloadComponent implements OnInit {
 
     ngOnInit() {
         this.registerEvents();
-    }
-
-    public downloadVideo() {
-        this.downloadService
-            .downloadVideo({
-                name: 'peppa_wutz_10.mp4',
-                path: '/tmp',
-                uri: 'https://www.youtube.com/watch?v=unEaSyx-LjE'
-            });
     }
 
     public cancelDownload(download) {

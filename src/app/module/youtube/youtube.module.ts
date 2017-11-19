@@ -6,15 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TruncateModule } from 'ng2-truncate';
 import { PaginationModule } from '../pagination/pagination.module';
 import { FilterModule } from '../filter/filter.module';
+import { SocketModule } from '../socket/socket.module';
 
 import { ApiService } from './provider/api.service';
 import { DownloadService } from './provider/download.service';
 
-import { DownloadComponent } from './components/download/download.component';
 import { SearchComponent } from '../../components/search/search.component';
 import { ItemCardComponent } from './components/item/item-card.component';
 import { ListComponent } from './components/list/list.component';
-import { MainComponent } from './components/main/main.component';
 
 @NgModule({
   imports: [
@@ -24,6 +23,7 @@ import { MainComponent } from './components/main/main.component';
     HttpModule,
     PaginationModule,
     ReactiveFormsModule,
+    SocketModule,
     TruncateModule
   ],
   providers: [
@@ -33,14 +33,13 @@ import { MainComponent } from './components/main/main.component';
   declarations: [
     ItemCardComponent,
     ListComponent,
-    MainComponent,
     SearchComponent
   ],
   entryComponents: [
-    MainComponent
+    ListComponent
   ],
   exports: [
-    MainComponent
+    ListComponent
   ]
 })
 export class YoutubeModule {

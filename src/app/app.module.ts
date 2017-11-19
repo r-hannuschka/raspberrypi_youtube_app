@@ -10,12 +10,14 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 import { routes } from './api/data/routes';
 import { menuItems } from './api/data/menu-items';
+import { YoutubePageComponent } from './components/youtube-page/youtube-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
-    DashboardComponent
+    DashboardComponent,
+    YoutubePageComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +27,7 @@ import { menuItems } from './api/data/menu-items';
   providers: [
     { provide: 'MenuItems', useValue: menuItems }
   ],
-  entryComponents: [ DashboardComponent ],
+  entryComponents: [ DashboardComponent, YoutubePageComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

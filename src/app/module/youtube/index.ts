@@ -1,2 +1,3 @@
-export { MainComponent } from './components/main/main.component';
-export { YoutubeModule} from './youtube.module';
+export { YoutubeModule } from './youtube.module';
+export * from './api';
+export * from './provider';

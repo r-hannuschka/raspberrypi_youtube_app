@@ -4,7 +4,7 @@ export interface IResponseList {
     data: {
         etag: string;
 
-        id: string;
+        id: string | { videoId: string };
 
         items: IItem[];
 

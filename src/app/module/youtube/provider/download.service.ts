@@ -3,17 +3,7 @@ import { SocketManager } from '../../socket/provider/socket.manager.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
-export interface IDownload {
-    isPending: boolean;
-    isRunning: boolean;
-    loaded: number;
-    name: string;
-    path: string;
-    pid: string;
-    size: number;
-    state: string;
-    uri: string;
-}
+import { IDownload } from '../api';
 
 @Injectable()
 export class DownloadService {
@@ -69,6 +59,14 @@ export class DownloadService {
      * @memberof DownloadService
      */
     public downloadVideo(data) {
+
+        /**
+         * prepare data
+         */
+
+        /**
+         * send download order to server
+         */
         this.socketManager
             .exec('youtube.download', {
                 action: 'download',

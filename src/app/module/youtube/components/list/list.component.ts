@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, TemplateRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { PaginationService } from '../../../pagination/providers/pagination.service';
 import { IPageEvent } from '../../../pagination/api/page-event.interface';
@@ -24,6 +24,9 @@ export class ListComponent implements OnInit {
   public filters: IFilter[];
 
   public isFilterActive = false;
+
+  @Input('actions')
+  public actions: TemplateRef<any>;
 
   private filterFactory: FilterFactory;
 
