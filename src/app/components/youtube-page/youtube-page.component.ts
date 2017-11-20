@@ -23,7 +23,6 @@ export class YoutubePageComponent implements OnInit {
    * @memberof YoutubePageComponent
    */
   public downloadVideo(item: IListItem) {
-    debugger;
     this.downloadService.downloadVideo({
       name: item.title,
       id: item.id

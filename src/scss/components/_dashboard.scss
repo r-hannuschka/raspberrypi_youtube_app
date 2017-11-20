@@ -1,0 +1,26 @@
+.component-dashboard {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap; 
+    flex-direction: row;
+
+    .dashboard--tile {
+        border: 1px solid rgb(225, 225, 225);
+        -webkit-box-shadow: 2px 2px 5px 1px rgba(215,215,215,1);
+        -moz-box-shadow: 2px 2px 5px 1px rgba(215,215,215,1);
+        box-shadow: 2px 2px 5px 1px rgba(215,215,215,1);
+        flex: 0 0 calc(50% - 1em);
+        height: calc(50% - 1em);
+        margin-bottom: .5em;
+        margin-top: .5em;
+        overflow-y: auto;
+
+        &:nth-child(2n) {
+            margin-left: 1em;
+        }
+
+        &:nth-child(n+3) {
+            margin-top: .5em;
+        }
+    }
+}
