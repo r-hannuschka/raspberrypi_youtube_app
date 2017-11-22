@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { IDownload, DownloadService } from '../../module/youtube';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
     selector: 'app-download-component',
@@ -7,7 +8,7 @@ import { IDownload, DownloadService } from '../../module/youtube';
     encapsulation: ViewEncapsulation.None,
     styleUrls: ['./download.component.scss']
 })
-export class DownloadComponent implements OnInit {
+export class DownloadComponent implements OnInit, OnDestroy {
 
     public description: string;
 
@@ -16,6 +17,8 @@ export class DownloadComponent implements OnInit {
     public currentDownloads: Map<string, number>;
 
     private downloadService: DownloadService;
+
+    private isDestroyed: Subject<boolean>;
 
     constructor(
         downloadService: DownloadService,
@@ -26,7 +29,14 @@ export class DownloadComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.registerEvents();
+        this.isDestroyed = new Subject<boolean>();
+        this.initDownloads();
+    }
+
+    public ngOnDestroy() {
+        this.isDestroyed.next(true);
+        this.isDestroyed.unsubscribe();
+        this.isDestroyed = null;
     }
 
     public cancelDownload(download) {
@@ -34,28 +44,30 @@ export class DownloadComponent implements OnInit {
             .cancelDownload(download.id);
     }
 
-    private registerEvents() {
+    private initDownloads() {
 
         this.downloadService
             .getDownloads()
-            .subscribe( (downloads: IDownload[]) => {
+            .takeUntil( this.isDestroyed )
+            .subscribe( this.handleDownloadsResponse.bind(this) );
+    }
 
-                downloads.forEach( (download: IDownload) => {
-                    let downloadData;
-                    if ( this.currentDownloads.has(download.pid) ) {
-                        downloadData = this.downloads[this.currentDownloads.get(download.pid)];
-                        downloadData.loaded = (Math.round(download.loaded * 100 / download.size) || 0) + '%';
-                        downloadData.state  = download.state;
-                    } else {
-                        this.downloads.push({
-                            id: download.pid,
-                            name: download.name,
-                            loaded: (Math.round(download.loaded * 100 / download.size) || 0) + '%',
-                            state: download.state
-                        });
-                        this.currentDownloads.set(download.pid, this.downloads.length - 1);
-                    }
+    private handleDownloadsResponse(downloads: IDownload[]) {
+        downloads.forEach( (download: IDownload) => {
+            let downloadData;
+            if ( this.currentDownloads.has(download.pid) ) {
+                downloadData = this.downloads[this.currentDownloads.get(download.pid)];
+                downloadData.loaded = (Math.round(download.loaded * 100 / download.size) || 0) + '%';
+                downloadData.state  = download.state;
+            } else {
+                this.downloads.push({
+                    id: download.pid,
+                    name: download.name,
+                    loaded: (Math.round(download.loaded * 100 / download.size) || 0) + '%',
+                    state: download.state
                 });
-            });
+                this.currentDownloads.set(download.pid, this.downloads.length - 1);
+            }
+        });
     }
 }

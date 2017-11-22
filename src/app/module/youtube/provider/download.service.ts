@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
 import { IDownload } from '../api';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class DownloadService {
@@ -24,9 +25,9 @@ export class DownloadService {
 
     private downloadSubs: number;
 
-    private socketSream: any;
+    private isListenToSocket = false;
 
-    private isListenToSocket: boolean;
+    private hasDownloadSubs: Subject<boolean>;
 
     constructor(
         socketManager: SocketManager
@@ -38,8 +39,8 @@ export class DownloadService {
             Array.from(this.downloads.values())
         );
 
-        this.socketSream = this.socketManager
-            .getMessages('youtube.download');
+        this.downloadSubs = 0;
+        this.hasDownloadSubs = new Subject<boolean>();
     }
 
     public cancelDownload(id) {
@@ -59,11 +60,6 @@ export class DownloadService {
      * @memberof DownloadService
      */
     public downloadVideo(data) {
-
-        /**
-         * prepare data
-         */
-
         /**
          * send download order to server
          */
@@ -79,23 +75,7 @@ export class DownloadService {
 
             // if we are not listing on socket channel do this now
             if ( ! this.isListenToSocket ) {
-                this.isListenToSocket = true;
-                this.socketSream
-                    .bufferTime(500)
-                    .subscribe((response: any[]) => {
-
-                        if ( ! response.length) {
-                            return;
-                        }
-
-                        response.forEach((responseData) => {
-                            this.handleResponse(responseData);
-                        });
-
-                        this.downloadStream.next(
-                            Array.from(this.downloads.values())
-                        );
-                    });
+                this.registerSocketStream();
             }
 
             // add observer to subject to get notfied if something changes
@@ -109,11 +89,35 @@ export class DownloadService {
 
                 if ( this.downloadSubs <= 0 ) {
                     this.isListenToSocket = false;
-                    this.socketSream.unsubscribe();
+                    this.hasDownloadSubs.next(false);
                 }
             }
         });
         return observable;
+    }
+
+    private registerSocketStream() {
+
+        this.isListenToSocket = true;
+
+        this.socketManager
+            .getMessages('youtube.download')
+            .takeUntil(this.hasDownloadSubs)
+            .bufferTime(500)
+            .subscribe((response: any[]) => {
+
+                if ( ! response.length) {
+                    return;
+                }
+
+                response.forEach((responseData) => {
+                    this.handleResponse(responseData);
+                });
+
+                this.downloadStream.next(
+                    Array.from(this.downloads.values())
+                );
+            });
     }
 
     private handleResponse(response) {
