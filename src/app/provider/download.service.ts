@@ -7,6 +7,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/mergeMap';
 
 import { IDownload } from '../api/data/download';
+import { IDownloadParam } from '../api/data/download/param';
 import { IDownloadResponse } from '../api/socket/download.response';
 
 @Injectable()
@@ -68,14 +69,14 @@ export class DownloadService {
      *
      * @memberof DownloadService
      */
-    public downloadVideo(data) {
+    public downloadVideo(param: IDownloadParam) {
         /**
          * send download order to server
          */
         this.socketManager
             .exec('youtube.download', {
                 action: 'download',
-                data
+                param
             });
     }
 
