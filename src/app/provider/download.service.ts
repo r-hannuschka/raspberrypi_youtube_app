@@ -59,7 +59,7 @@ export class DownloadService {
             this.socketManager
                 .exec('youtube.download', {
                     action: 'cancel',
-                    data: id
+                    param: id
                 });
         }
     }

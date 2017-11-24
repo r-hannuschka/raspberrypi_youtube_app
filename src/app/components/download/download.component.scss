@@ -3,24 +3,29 @@
 
 app-download-component {
 
-    .file-list {
+    .download--item {
+        font-size: .9rem;
+    }
 
-        .progress {
-            align-self: center;
-            flex: 1 0;
+    .download--item-header {
+        border-bottom: 1px solid #AEAEAE;
+        padding: 0 0 .5rem;
+        margin: 0 0 .5rem;
+    }
+
+    .download--item-title {
+        flex: 1;
+        margin-right: .5rem;
+    }
+
+    .download--item-progress {
+
+        .progress-bar {
+            height: .5rem;
         }
 
-        .download-state {
-            width: 100px;
-            padding: .3rem 0;
-
-            &.state-progress {
-                background: theme-color("primary");
-            }
-
-            &.state-pending {
-                background: theme-color("secondary");
-            }
-        }
+        background: #AEAEAE;
+        margin: 0 0 .5rem;
+        border-width: 1px 0 0;
     }
 }

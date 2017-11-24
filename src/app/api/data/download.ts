@@ -1,3 +1,5 @@
+import { IFile } from './file';
+
 export interface IDownload {
 
     /**
@@ -35,10 +37,10 @@ export interface IDownload {
     /**
      * params send to task
      *
-     * @type {{[key: string]: any}}
+     * @type IFile
      * @memberof IDownload
      */
-    param: { [key: string]: any };
+    raw: IFile;
 
     /**
      * child process id

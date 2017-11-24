@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { IDownload } from '../../api/data/download';
+import { IFile } from '../../api/data/file';
 import { DownloadService } from '../../provider/download.service';
 import { Subject } from 'rxjs/Subject';
 
@@ -64,7 +65,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
                 this.downloads.push({
                     id: download.pid,
                     loaded: (Math.round(download.loaded * 100 / download.size) || 0) + '%',
-                    state: download.state
+                    state: download.state,
+                    raw: download.raw
                 });
                 this.currentDownloads.set(download.pid, this.downloads.length - 1);
             }

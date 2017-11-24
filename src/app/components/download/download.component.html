@@ -2,18 +2,27 @@
     <div class="row">
         <div class="col">
             <ul class="list-group file-list">
-                <li *ngFor="let download of downloads" class="list-group-item d-flex badge-info flex-column">
-                    <span class="text-primary leading-5 mb-2">{{download.name}}</span>
-                    <div class="d-flex flex-row">
-                        <span class="badge badge-info badge-pill download-state state-{{download.state}} d-flex justify-content-center align-items-center">
-                    {{download.state}}
-                </span>
-                        <div class="progress ml-3 mr-3">
-                            <div class="progress-bar" [ngStyle]="{'width': (download.loaded)}">{{download.loaded}}</div>
+                <li *ngFor="let download of downloads" class="list-group-item">
+                    <div class="download--item d-flex flex-column">
+                        <div class="download--item-header d-flex flex-row">
+                            <span class="download--item-title">
+                                {{download.raw.name}}
+                            </span>
+                            <span class="download--item-actions align-self-start">
+                                <button class="btn btn-outline-danger btn-sm" (click)="cancelDownload(download)">
+                                    <i class="fa fa-ban"></i>
+                                </button>
+                            </span>
                         </div>
-                        <button class="btn btn-outline-danger btn-sm" (click)="cancelDownload(download)">
-                    <i class="fa fa-ban"></i>
-                </button>
+                        <div class="download--item-body d-flex flex-column">
+                            <div class="download--item-progress">
+                                <div class="progress-bar" [ngStyle]="{'width': (download.loaded)}"></div>
+                            </div>
+                            <div class="flex-row d-flex justify-content-between">
+                                <span>{{download.state}}</span>
+                                <span>{{download.loaded}}</span>
+                            </div>
+                        </div>
                     </div>
                 </li>
             </ul>
