@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IListItem, DownloadService } from '../../module/youtube';
+import { DownloadService } from '../../provider/download.service';
+import { IListItem } from '../../module/youtube';
 
 @Component({
   selector: 'app-youtube-page',

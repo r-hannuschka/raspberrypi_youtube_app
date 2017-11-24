@@ -13,6 +13,8 @@ import { routes } from './api/data/routes';
 import { menuItems } from './api/data/menu-items';
 import { YoutubePageComponent } from './components/youtube-page/youtube-page.component';
 
+import { DownloadService, SocketManager } from './provider';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +29,9 @@ import { YoutubePageComponent } from './components/youtube-page/youtube-page.com
     RouterModule.forRoot( routes )
   ],
   providers: [
-    { provide: 'MenuItems', useValue: menuItems }
+    { provide: 'MenuItems', useValue: menuItems },
+    DownloadService,
+    SocketManager
   ],
   entryComponents: [ DashboardComponent, YoutubePageComponent ],
   bootstrap: [AppComponent]

@@ -1,4 +1,3 @@
-export * from './data/download.interface';
 export * from './data/list-item.interface';
 export * from './http/response/item.interface';
 export * from './http/response/response-list.interface';

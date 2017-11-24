@@ -6,10 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TruncateModule } from 'ng2-truncate';
 import { PaginationModule } from '../pagination/pagination.module';
 import { FilterModule } from '../filter/filter.module';
-import { SocketModule } from '../socket/socket.module';
 
 import { ApiService } from './provider/api.service';
-import { DownloadService } from './provider/download.service';
 
 import { SearchComponent } from '../../components/search/search.component';
 import { ItemCardComponent } from './components/item/item-card.component';
@@ -23,12 +21,10 @@ import { ListComponent } from './components/list/list.component';
     HttpModule,
     PaginationModule,
     ReactiveFormsModule,
-    SocketModule,
     TruncateModule
   ],
   providers: [
-    ApiService,
-    DownloadService
+    ApiService
   ],
   declarations: [
     ItemCardComponent,

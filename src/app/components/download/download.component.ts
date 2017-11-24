@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { IDownload, DownloadService } from '../../module/youtube';
+import { IDownload } from '../../api/data/download';
+import { DownloadService } from '../../provider/download.service';
 import { Subject } from 'rxjs/Subject';
 
 @Component({
@@ -62,7 +63,6 @@ export class DownloadComponent implements OnInit, OnDestroy {
             } else {
                 this.downloads.push({
                     id: download.pid,
-                    name: download.name,
                     loaded: (Math.round(download.loaded * 100 / download.size) || 0) + '%',
                     state: download.state
                 });
