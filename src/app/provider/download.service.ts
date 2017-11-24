@@ -15,11 +15,7 @@ export class DownloadService {
 
     public static readonly SOCKET_EVENT_CONNECTED = 'connect';
 
-    public static readonly SOCKET_EVENT_DOWNLOAD_END = 'finish';
-
-    public static readonly SOCKET_EVENT_DOWNLOAD_UPDATE = 'update';
-
-    public static readonly SOCKET_EVENT_DOWNLOAD_INITIALIZED = 'initialized';
+    public static readonly SOCKET_EVENT_DOWNLOAD_QUEUED = 'download_provider.downloadqueued';
 
     private downloads: Map<string, IDownload>;
 
@@ -133,7 +129,6 @@ export class DownloadService {
             })
             .map( this.reduceDownloadResponseList )
             .subscribe((responseList: IDownloadResponse[]) => {
-
                 responseList.forEach((response: IDownloadResponse) => {
                     this.handleResponse(response);
                 });
@@ -185,6 +180,8 @@ export class DownloadService {
             }
         });
 
+        console.log ( reducedList );
+
         return reducedList;
     }
 
@@ -210,7 +207,7 @@ export class DownloadService {
                 });
                 break;
 
-            case DownloadService.SOCKET_EVENT_DOWNLOAD_INITIALIZED:
+            case DownloadService.SOCKET_EVENT_DOWNLOAD_QUEUED:
                 this.addDownload(download);
                 break;
 
