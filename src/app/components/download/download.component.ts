@@ -39,6 +39,9 @@ export class DownloadComponent implements OnInit, OnDestroy {
         this.isDestroyed.next(true);
         this.isDestroyed.unsubscribe();
         this.isDestroyed = null;
+
+        this.downloads = [];
+        this.currentDownloads.clear();
     }
 
     public cancelDownload(download) {

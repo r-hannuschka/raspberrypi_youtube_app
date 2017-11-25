@@ -4,5 +4,5 @@ export interface IDownloadResponse {
 
     event: string;
 
-    data: IDownload;
+    data: IDownload | IDownload[];
 }
