@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SocketManager } from './socket.manager.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-
-import 'rxjs/add/operator/mergeMap';
 
 import { IDownload } from '../api/data/download';
 import { IDownloadParam } from '../api/data/download/param';
@@ -20,7 +17,7 @@ export class DownloadService {
 
     public static readonly SOCKET_EVENT_DOWNLOAD_FINISHED = 'download_provider.downloadend';
 
-    public static readonly SOCKET_EVENT_DOWNLOAD_CANCEL = 'download_provider.downloadcancle';
+    public static readonly SOCKET_EVENT_DOWNLOAD_CANCEL = 'download_provider.downloadcancel';
 
     public static readonly SOCKET_EVENT_DOWNLOAD_ERROR = 'download_provider.downloaderror';
 
@@ -28,7 +25,7 @@ export class DownloadService {
 
     private socketManager: SocketManager;
 
-    private downloadStream: BehaviorSubject<IDownload[]>;
+    private downloadStream: Subject<IDownload[]>;
 
     private downloadSubs: number;
 
@@ -42,9 +39,7 @@ export class DownloadService {
         this.socketManager = socketManager;
         this.downloads = new Map();
 
-        this.downloadStream = new BehaviorSubject(
-            Array.from(this.downloads.values())
-        );
+        this.downloadStream = new Subject();
 
         this.downloadSubs = 0;
         this.hasDownloadSubs = new Subject<boolean>();
@@ -216,6 +211,15 @@ export class DownloadService {
             // add task to update list
             let index = -1;
             ((index = updated.indexOf(task) ) !== -1) ? updated.splice(index, 1, task) : updated.push(task);
+
+            // remove downloads which are done (cancel, error, finish)
+            if (
+                response.event === DownloadService.SOCKET_EVENT_DOWNLOAD_CANCEL ||
+                response.event === DownloadService.SOCKET_EVENT_DOWNLOAD_ERROR  ||
+                response.event === DownloadService.SOCKET_EVENT_DOWNLOAD_FINISHED
+            ) {
+                this.downloads.delete(task.pid);
+            }
          });
 
         // send updated tasks to user

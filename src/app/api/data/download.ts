@@ -1,5 +1,11 @@
 import { IFile } from './file';
 
+export const DOWNLOAD_STATE_FINISHED = 'end';
+export const DOWNLOAD_STATE_CANCEL   = 'cancel';
+export const DOWNLOAD_STATE_ERROR    = 'error';
+export const DOWNLOAD_STATE_QUEUED   = 'queued';
+export const DOWNLOAD_STATE_START    = 'start';
+
 export interface IDownload {
 
     /**
