@@ -4,4 +4,5 @@ export interface IPageEvent {
     data: {
         page?: number
     };
+
 }

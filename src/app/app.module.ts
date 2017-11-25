@@ -1,17 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes} from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { YoutubeModule } from './module/youtube/youtube.module';
+import { VideoModule } from './module/video/video.module';
 
 import { AppComponent } from './app.component';
-import { NavComponent } from './components/nav/nav.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { DownloadComponent } from './components/download/download.component';
+import {
+  DashboardComponent,
+  DownloadComponent,
+  YoutubePageComponent,
+  NavComponent,
+  VideoComponent
+} from './components';
+
+import { videoConfig as videoModuleConfig } from './etc/video.config';
 
 import { routes } from './api/data/routes';
 import { menuItems } from './api/data/menu-items';
-import { YoutubePageComponent } from './components/youtube-page/youtube-page.component';
 
 import { DownloadService, SocketManager } from './provider';
 
@@ -22,18 +28,24 @@ import { DownloadService, SocketManager } from './provider';
     DownloadComponent,
     NavComponent,
     YoutubePageComponent,
+    VideoComponent,
   ],
   imports: [
     BrowserModule,
-    YoutubeModule,
-    RouterModule.forRoot( routes )
+    VideoModule.forRoot(videoModuleConfig),
+    RouterModule.forRoot(routes),
+    YoutubeModule
   ],
   providers: [
     { provide: 'MenuItems', useValue: menuItems },
     DownloadService,
     SocketManager
   ],
-  entryComponents: [ DashboardComponent, YoutubePageComponent ],
+  entryComponents: [
+    DashboardComponent,
+    YoutubePageComponent,
+    VideoComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

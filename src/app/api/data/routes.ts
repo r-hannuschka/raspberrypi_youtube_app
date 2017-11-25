@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
-import { YoutubePageComponent } from '../../components/youtube-page/youtube-page.component';
-import { DashboardComponent } from '../../components/dashboard/dashboard.component';
+import {
+    DashboardComponent,
+    YoutubePageComponent,
+    VideoComponent
+} from '../../components';
 
 export const routes: Routes = [{
     path: 'youtube',
     component: YoutubePageComponent
+}, {
+    path: 'video',
+    component: VideoComponent,
 }, {
     path: '',
     component: DashboardComponent

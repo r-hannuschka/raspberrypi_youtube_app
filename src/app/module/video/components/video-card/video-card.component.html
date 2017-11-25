@@ -1,0 +1,10 @@
+<div class="card">
+    <img src="{{video.image}}" alt="" class="card-img-top">
+    <div class="card-block">
+      <h4 class="card-title">{{video.name}}</h4>
+      <p class="card-text">{{video.description | words: 40 : "..."}}</p>
+    </div>
+    <div class="card-footer">
+      <ng-content></ng-content>
+    </div>
+  </div>

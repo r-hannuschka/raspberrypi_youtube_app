@@ -1,0 +1,9 @@
+<app-page-navigation></app-page-navigation>
+
+<div class="card-group">
+    <ng-container *ngFor="let video of videos">
+        <app-video-card [video]="video">
+        </app-video-card>
+    </ng-container>
+</div>
+<app-page-navigation></app-page-navigation>
