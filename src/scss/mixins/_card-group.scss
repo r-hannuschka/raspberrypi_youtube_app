@@ -1,0 +1,11 @@
+@mixin cardGroup($cols, $gap: 1rem, $selector: 'card-item') 
+{
+  @if $cols > 1 {
+    justify-content: space-between;
+  }
+  
+  #{$selector} {
+    width: calc( (100% / #{$cols}) - (#{$gap} / 2) );
+    margin-bottom: $gap;
+  }
+}

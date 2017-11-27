@@ -1,13 +1,14 @@
-import { IVideoConfig } from '../module/video/api/video.config';
-import { API } from '../module/video/api/api';
-
-const videoRestApi: API = {
-
-    baseUrl: 'http://localhost:8080/api/video/',
-
-    limit  :  20
-};
+import { IVideoConfig } from '../module/video/api/config';
 
 export const videoConfig: IVideoConfig = {
-    api: videoRestApi
+
+    api: {
+        baseUrl: 'http://localhost:8080/api/video/'
+    },
+
+    list: {
+        colCount: 2,
+
+        itemsPerPage: 10
+    }
 };

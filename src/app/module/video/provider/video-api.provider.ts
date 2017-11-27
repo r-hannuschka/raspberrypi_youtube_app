@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http, Response, RequestOptionsArgs } from '@angular/http';
-import { API } from '../api/api';
+import { API } from '../api/config/api';
 import { Observable } from 'rxjs/Observable';
 
 import { IVideoResponse } from '../api';
-import { IVideoConfig } from '../api/video.config';
+import { IVideoConfig } from '../api/config';
 
 @Injectable()
 export class VideoApiProvider {

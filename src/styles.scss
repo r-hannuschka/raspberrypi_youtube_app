@@ -1,11 +1,9 @@
 @import "./scss/variables";
-
 @import "../node_modules/bootstrap/scss/bootstrap";
 @import "../node_modules/font-awesome/scss/font-awesome";
-
+@import "./scss/mixins";
 @import "./scss/layout";
-@import "./scss/components/dashboard";
-@import "./scss/components/navbar";
+@import "./scss/components";
 
 .invalid-feedback {
     display: block;

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { PaginationService } from '../../../pagination/providers/pagination.service';
 import { IPageEvent } from '../../../pagination/api/page-event.interface';
 
 import { IVideoFile, IVideoResponse } from '../../api/index';
 import { VideoApiProvider } from '../../provider/video-api.provider';
+import { IVideoConfig } from '../../api/config';
 
 @Component({
   providers    : [PaginationService],    // provide own instance of Pagination Service
@@ -18,6 +19,8 @@ export class ListComponent implements OnInit {
 
   private page: number;
 
+  private itemsPerPage: number;
+
   /**
    * constructor
    *
@@ -26,9 +29,11 @@ export class ListComponent implements OnInit {
    */
   constructor(
     private pagination: PaginationService,
-    private fileApi: VideoApiProvider
+    private fileApi: VideoApiProvider,
+    @Inject('VideoConfig') videoConfig: IVideoConfig
   ) {
     this.page = 1;
+    this.itemsPerPage = videoConfig.list.itemsPerPage;
   }
 
   /**
@@ -37,9 +42,8 @@ export class ListComponent implements OnInit {
    * @memberof ListComponent
    */
   public ngOnInit() {
-    // just say we have 90 items
     this.pagination.configure({
-      itemPageCount: 18,
+      itemPageCount: this.itemsPerPage || 18,
       currentPage: 1
     });
 
@@ -62,7 +66,7 @@ export class ListComponent implements OnInit {
   protected loadVideos() {
 
     this.fileApi
-      .list(18, this.page)
+      .list(this.itemsPerPage, this.page)
       .subscribe( (response: IVideoResponse) => {
         this.handleApiResponse(response);
       });
@@ -72,7 +76,7 @@ export class ListComponent implements OnInit {
    * handle api response
    *
    * @protected
-   * @param {IVideoResponse} response 
+   * @param {IVideoResponse} response
    * @memberof ListComponent
    */
   protected handleApiResponse(response: IVideoResponse) {

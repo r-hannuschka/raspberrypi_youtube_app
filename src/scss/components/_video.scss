@@ -1,0 +1,6 @@
+app-video-list {
+
+    .card-group {
+        @include cardGroup(2, 1rem, app-video-card);
+    }
+}
