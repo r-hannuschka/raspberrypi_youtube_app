@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DownloadService } from '../../provider/download.service';
 import { IListItem } from '../../module/youtube';
 import { IYoutubeDownloadParam } from '../../module/youtube/api/data/download/param';
@@ -8,15 +8,12 @@ import { IYoutubeDownloadParam } from '../../module/youtube/api/data/download/pa
   templateUrl: './youtube-page.component.html',
   styleUrls: ['./youtube-page.component.css']
 })
-export class YoutubePageComponent implements OnInit {
+export class YoutubePageComponent {
 
   private downloadService: DownloadService;
 
   constructor( downloadService: DownloadService ) {
     this.downloadService = downloadService;
-  }
-
-  ngOnInit() {
   }
 
   /**
@@ -27,9 +24,9 @@ export class YoutubePageComponent implements OnInit {
   public downloadVideo(item: IListItem) {
     const downloadParam: IYoutubeDownloadParam = {
       description: item.description,
-      id: item.id,
+      video_id: item.id,
       name: item.title,
-      image: item.thumbnail,
+      imageUri: item.thumbnail,
       type: 'video'
     };
     this.downloadService.downloadVideo(downloadParam);

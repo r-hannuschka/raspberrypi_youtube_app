@@ -72,22 +72,22 @@ export class DownloadComponent implements OnInit, OnDestroy {
                 download.state === DOWNLOAD_STATE_ERROR    ||
                 download.state === DOWNLOAD_STATE_CANCEL
             ) {
-                this.currentDownloads.delete(download.pid);
+                this.currentDownloads.delete(download.id);
                 return;
             }
 
             let downloadData;
 
-            if ( this.currentDownloads.has(download.pid) ) {
-                downloadData = this.currentDownloads.get(download.pid);
+            if ( this.currentDownloads.has(download.id) ) {
+                downloadData = this.currentDownloads.get(download.id);
                 downloadData.loaded = (Math.round(download.loaded * 100 / download.size) || 0) + '%';
                 downloadData.state  = download.state;
             } else {
-                this.currentDownloads.set(download.pid, {
-                    id: download.pid,
+                this.currentDownloads.set(download.id, {
+                    id: download.id,
                     loaded: (Math.round(download.loaded * 100 / download.size) || 0) + '%',
                     state: download.state,
-                    raw: download.raw
+                    name: download.name
                 });
             }
         });

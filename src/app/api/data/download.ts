@@ -40,13 +40,7 @@ export interface IDownload {
      */
     loaded: number;
 
-    /**
-     * params send to task
-     *
-     * @type IFile
-     * @memberof IDownload
-     */
-    raw: IFile;
+    name: string;
 
     /**
      * child process id
@@ -54,7 +48,7 @@ export interface IDownload {
      * @type {string}
      * @memberof IDownload
      */
-    pid: string;
+    id: string;
 
     /**
      * full size of download
@@ -63,12 +57,4 @@ export interface IDownload {
      * @memberof IDownload
      */
     size: number;
-
-    /**
-     * path to task
-     *
-     * @type {string}
-     * @memberof IDownload
-     */
-    task: string;
 }

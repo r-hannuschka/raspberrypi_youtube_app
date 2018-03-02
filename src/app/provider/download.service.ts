@@ -3,7 +3,7 @@ import { SocketManager } from './socket.manager.service';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-import { IDownload } from '../api/data/download';
+import { IDownload, DOWNLOAD_STATE_FINISHED } from '../api/data/download';
 import { IDownloadParam } from '../api/data/download/param';
 import { IDownloadResponse } from '../api/socket/download.response';
 import { IResponseList } from '../module/youtube/index';
@@ -165,7 +165,7 @@ export class DownloadService {
         let index      = -1;
 
         responseList.forEach( (response: IDownloadResponse) => {
-            const value = `${response.event}${(response.data as IDownload).pid}`;
+            const value = `${response.event}${(response.data as IDownload).id}`;
             if ( uniqeItems.hasOwnProperty(value) ) {
                 const itemIndex = uniqeItems[value];
                 reducedList.splice(itemIndex, 1, response);
@@ -196,7 +196,7 @@ export class DownloadService {
                 download = response.data as IDownload[];
                 download.forEach( (dl: IDownload) => {
                     this.addDownload(dl);
-                    updated.push(this.downloads.get(dl.pid));
+                    updated.push(this.downloads.get(dl.id));
                 });
                 return;
             }
@@ -218,7 +218,7 @@ export class DownloadService {
                 response.event === DownloadService.SOCKET_EVENT_DOWNLOAD_ERROR  ||
                 response.event === DownloadService.SOCKET_EVENT_DOWNLOAD_FINISHED
             ) {
-                this.downloads.delete(task.pid);
+                this.downloads.delete(task.id);
             }
          });
 
@@ -234,7 +234,7 @@ export class DownloadService {
      * @memberof DownloadService
      */
     private addDownload(download: IDownload): IDownload {
-        this.downloads.set(download.pid, download);
+        this.downloads.set(download.id, download);
         return download;
     }
 
@@ -246,7 +246,8 @@ export class DownloadService {
      * @memberof DownloadService
      */
     private updateDownload(download: IDownload): IDownload {
-        const task: IDownload = this.downloads.get(download.pid);
+
+        const task: IDownload = this.downloads.get(download.id);
         task.loaded = download.loaded;
         task.size   = download.size;
         task.state  = download.state;

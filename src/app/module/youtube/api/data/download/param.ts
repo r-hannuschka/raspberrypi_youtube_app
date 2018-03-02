@@ -1,5 +1,10 @@
 import { IDownloadParam } from '../../../../../api/data/download/param';
 
 export interface IYoutubeDownloadParam extends IDownloadParam {
-    id: string;
+
+    description?: string;
+
+    imageUri?: string;
+
+    video_id: string;
 }
