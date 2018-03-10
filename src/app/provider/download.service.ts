@@ -245,12 +245,11 @@ export class DownloadService {
      * @param {IDownload} download
      * @memberof DownloadService
      */
-    private updateDownload(download: IDownload): IDownload {
-
-        const task: IDownload = this.downloads.get(download.id);
-        task.loaded = download.loaded;
-        task.size   = download.size;
-        task.state  = download.state;
+    private updateDownload(response: IDownload): IDownload {
+        const task: IDownload = this.downloads.get(response.id);
+        task.file.loaded = response.file.loaded;
+        task.file.size   = response.file.size;
+        task.state       = response.state;
         return task;
     }
 }

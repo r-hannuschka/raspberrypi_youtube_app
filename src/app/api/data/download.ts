@@ -3,58 +3,33 @@ import { IFile } from './file';
 export const DOWNLOAD_STATE_FINISHED = 'end';
 export const DOWNLOAD_STATE_CANCEL   = 'cancel';
 export const DOWNLOAD_STATE_ERROR    = 'error';
+export const DOWNLOAD_STATE_INITIALIZE = 'initialize';
 export const DOWNLOAD_STATE_QUEUED   = 'queued';
 export const DOWNLOAD_STATE_START    = 'start';
 
 export interface IDownload {
 
-    /**
-     *
-     *
-     * @type {string}
-     * @memberof IDownload
-     */
-    error?: string;
+    error: string;
 
-    /**
-     * group downloads by name to filter them
-     *
-     * @type {string}
-     * @memberof IDownload
-     */
-    group?: string;
+    file: {
+        fileName: string;
 
-    /**
-     * current download state
-     *
-     * @type {string}
-     * @memberof IDownload
-     */
-    state: string;
+        imageUri: string;
 
-    /**
-     * bytes allready loaded
-     *
-     * @type {number}
-     * @memberof IDownload
-     */
-    loaded: number;
+        loaded: number;
 
-    name: string;
+        path: string;
 
-    /**
-     * child process id
-     *
-     * @type {string}
-     * @memberof IDownload
-     */
+        size: number;
+
+        title: string;
+
+        video_id: string;
+    };
+
+    group: string;
+
     id: string;
 
-    /**
-     * full size of download
-     *
-     * @type {number}
-     * @memberof IDownload
-     */
-    size: number;
+    state: string;
 }

@@ -7,6 +7,7 @@ import {
     DOWNLOAD_STATE_CANCEL,
     DOWNLOAD_STATE_ERROR,
     DOWNLOAD_STATE_FINISHED,
+    DOWNLOAD_STATE_INITIALIZE,
     DOWNLOAD_STATE_QUEUED,
     DOWNLOAD_STATE_START,
     IDownload
@@ -80,14 +81,14 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
             if ( this.currentDownloads.has(download.id) ) {
                 downloadData = this.currentDownloads.get(download.id);
-                downloadData.loaded = (Math.round(download.loaded * 100 / download.size) || 0) + '%';
+                downloadData.loaded = (Math.round(download.file.loaded * 100 / download.file.size) || 0) + '%';
                 downloadData.state  = download.state;
             } else {
                 this.currentDownloads.set(download.id, {
                     id: download.id,
-                    loaded: (Math.round(download.loaded * 100 / download.size) || 0) + '%',
+                    loaded: (Math.round(download.file.loaded * 100 / download.file.size) || 0) + '%',
                     state: download.state,
-                    name: download.name
+                    name: download.file.title
                 });
             }
         });
