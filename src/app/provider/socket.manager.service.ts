@@ -30,6 +30,7 @@ export class SocketManager {
 
   constructor() {
     // url configureable
+    // this.socket = socketIOClient('http://192.168.188.200:8080');
     this.socket = socketIOClient('http://localhost:8080');
     this.channelMap = new Map();
     this.registerEvents();

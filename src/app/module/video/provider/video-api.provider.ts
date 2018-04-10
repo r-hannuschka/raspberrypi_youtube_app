@@ -3,7 +3,7 @@ import { Http, Response, RequestOptionsArgs } from '@angular/http';
 import { API } from '../api/config/api';
 import { Observable } from 'rxjs/Observable';
 
-import { IVideoResponse } from '../api';
+import { IVideoResponse, IVideoFile } from '../api';
 import { IVideoConfig } from '../api/config';
 
 @Injectable()
@@ -36,6 +36,14 @@ export class VideoApiProvider {
         return this.httpProvider.get(`${this.apiConfig.baseUrl}list`, requestArgs)
             .map( (res: Response): IVideoResponse => {
                 const body = res.json();
+                const videos: IVideoFile[] = body.data.videos;
+
+                videos.forEach( (video, index: number) => {
+                    if ( video.image && video.image.replace(/(^\s*|\s*$)/g, '') !== '' ) {
+                        video.image = `http://localhost:8080/${video.image}`;
+                    }
+                });
+
                 return body.data;
             });
     }
