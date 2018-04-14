@@ -10,9 +10,18 @@ import { ListComponent } from './components/list/list.component';
 import { VideoCardComponent } from './components/video-card/video-card.component';
 
 @NgModule({
-    declarations: [ListComponent, VideoCardComponent],
-    imports: [ CommonModule, PaginationModule, TruncateModule ],
-    exports: [ListComponent],
+    declarations: [
+        ListComponent,
+        VideoCardComponent
+    ],
+    imports: [
+        CommonModule,
+        PaginationModule,
+        TruncateModule
+    ],
+    exports: [
+        ListComponent
+    ],
     providers: []
 })
 export class VideoModule {

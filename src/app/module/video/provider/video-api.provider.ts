@@ -33,7 +33,7 @@ export class VideoApiProvider {
             }
         };
 
-        return this.httpProvider.get(`${this.apiConfig.baseUrl}list`, requestArgs)
+        return this.httpProvider.get(this.apiConfig.video.list, requestArgs)
             .map( (res: Response): IVideoResponse => {
                 const body = res.json();
                 const videos: IVideoFile[] = body.data.videos;
@@ -46,5 +46,13 @@ export class VideoApiProvider {
 
                 return body.data;
             });
+    }
+
+    public playVideo(video: IVideoFile) {
+        this.httpProvider.post(this.apiConfig.video.play, {
+            params: {
+                video: video.id
+            }
+        });
     }
 }

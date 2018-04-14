@@ -3,6 +3,19 @@
 <div class="card-group">
     <ng-container *ngFor="let video of videos">
         <app-video-card [video]="video">
+
+            <ng-container>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" (click)="play(video)">
+                        <i class="fa fa-play"></i>
+                        <span>play</span>
+                    </button>
+                    <button class="btn btn-secondary" (click)="delete(video)">
+                        <i class="fa fa-trash"></i>
+                        <span>delete</span>
+                    </button>
+                </div>
+            </ng-container>
         </app-video-card>
     </ng-container>
 </div>

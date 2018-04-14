@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Input, TemplateRef } from '@angular/core';
 import { PaginationService } from '../../../pagination/providers/pagination.service';
 import { IPageEvent } from '../../../pagination/api/page-event.interface';
 
@@ -15,6 +15,9 @@ import { IVideoConfig } from '../../api/config';
 })
 export class ListComponent implements OnInit {
 
+  @Input('actions')
+  public actions: TemplateRef<any>;
+
   public videos: IVideoFile[];
 
   private page: number;
@@ -29,7 +32,7 @@ export class ListComponent implements OnInit {
    */
   constructor(
     private pagination: PaginationService,
-    private fileApi: VideoApiProvider,
+    private videoApi: VideoApiProvider,
     @Inject('VideoConfig') videoConfig: IVideoConfig
   ) {
     this.page = 1;
@@ -57,6 +60,13 @@ export class ListComponent implements OnInit {
     this.loadVideos();
   }
 
+  public play(video: IVideoFile) {
+    this.videoApi.playVideo(video);
+  }
+
+  public delete() {
+  }
+
   /**
    * load videos from api
    *
@@ -65,7 +75,7 @@ export class ListComponent implements OnInit {
    */
   protected loadVideos() {
 
-    this.fileApi
+    this.videoApi
       .list(this.itemsPerPage, this.page)
       .subscribe( (response: IVideoResponse) => {
         this.handleApiResponse(response);
