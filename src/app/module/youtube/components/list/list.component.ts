@@ -1,14 +1,11 @@
 import { Component, OnInit, ViewEncapsulation, Input, TemplateRef } from '@angular/core';
+import { FilterFactory, FilterService, IFilter } from '@app-module/filter';
+import { IPageEvent, PaginationService } from '@app-module/pagination';
 import { Observable } from 'rxjs/Observable';
-import { PaginationService } from '../../../pagination/providers/pagination.service';
-import { IPageEvent } from '../../../pagination/api/page-event.interface';
+
 import { IItem, IListItem, IResponseList } from '../../api';
 import { ApiService } from '../../provider/api.service';
 import { ListDataModel } from '../../model/list-data.model';
-
-import { IFilter } from '../../../filter/api/filter.interface';
-import { FilterFactory } from '../../../filter/model/filter.factory';
-import { FilterService } from '../../../filter/provider/filter.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -184,7 +181,7 @@ export class ListComponent implements OnInit {
 
     // check page
     if (this.listDataModel.getPage() !== 1) {
-      param['pageToken'] = this.listDataModel.getNextPageToken()
+      param['pageToken'] = this.listDataModel.getNextPageToken();
     }
 
     if (searchQuery.length) {

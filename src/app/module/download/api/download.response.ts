@@ -1,4 +1,4 @@
-import { IDownload } from '../data/download';
+import { IDownload } from './data/download';
 
 export interface IDownloadResponse {
 

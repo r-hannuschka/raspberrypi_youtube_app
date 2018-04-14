@@ -100,7 +100,7 @@ export class SocketManager {
           channelSubscription = null;
         }
         sub.unsubscribe();
-      }
+      };
     });
     return observable;
   }

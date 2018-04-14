@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { DownloadService } from '../../provider/download.service';
-import { IListItem } from '../../module/youtube';
-import { IYoutubeDownloadParam } from '../../module/youtube/api/data/download/param';
+import { DownloadService } from '@app-module/download/providers/download.service';
+import { IListItem } from '@app-module/youtube';
+import { IYoutubeDownloadParam } from '@app-module/youtube/api/data/download/param';
 
 @Component({
   selector: 'app-youtube-page',

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { IFile } from '../../api/data/file';
-import { DownloadService } from '../../provider/download.service';
+import { DownloadService } from '../../providers/download.service';
 import { Subject } from 'rxjs/Subject';
 
 import {

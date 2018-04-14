@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { SocketManager } from './socket.manager.service';
+import { SocketManager } from '@app-module/socket';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 import { IDownload, DOWNLOAD_STATE_FINISHED } from '../api/data/download';
 import { IDownloadParam } from '../api/data/download/param';
-import { IDownloadResponse } from '../api/socket/download.response';
-import { IResponseList } from '../module/youtube/index';
+import { IDownloadResponse } from '../api/download.response';
+
+// @todo remove youtube dependency
+import { IResponseList } from '@app-module/youtube/index';
 
 @Injectable()
 export class DownloadService {

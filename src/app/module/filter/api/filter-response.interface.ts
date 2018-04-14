@@ -4,5 +4,5 @@ export interface IFilterResponse {
 
   action: string;
 
-  filters: IFilter[]
+  filters: IFilter[];
 }

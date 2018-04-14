@@ -1,4 +1,4 @@
-import { IDownloadParam } from '../../../../../api/data/download/param';
+import { IDownloadParam } from '@app-module/download/api/data/download/param';
 
 export interface IYoutubeDownloadParam extends IDownloadParam {
 

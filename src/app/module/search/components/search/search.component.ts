@@ -27,8 +27,7 @@ export class SearchComponent implements OnInit {
    *
    * @memberof SearchBarComponent
    */
-  public onSubmit(query: string)
-  {
+  public onSubmit(query: string) {
     this.isSend = true;
 
     if ( this.searchControl.valid ) {

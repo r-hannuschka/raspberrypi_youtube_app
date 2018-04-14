@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaginationModule } from '../pagination/pagination.module';
+import { PaginationModule } from '@app-module/pagination';
 import { ModuleWithProviders } from '@angular/core/src/metadata/ng_module';
 import { TruncateModule } from 'ng2-truncate';
 

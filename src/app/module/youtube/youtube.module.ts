@@ -4,12 +4,13 @@ import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TruncateModule } from 'ng2-truncate';
-import { PaginationModule } from '../pagination/pagination.module';
-import { FilterModule } from '../filter/filter.module';
+
+import { PaginationModule } from '@app-module/pagination';
+import { FilterModule } from '@app-module/filter';
+import { SearchModule } from '@app-module/search';
 
 import { ApiService } from './provider/api.service';
 
-import { SearchComponent } from '../../components/search/search.component';
 import { ItemCardComponent } from './components/item/item-card.component';
 import { ListComponent } from './components/list/list.component';
 
@@ -21,6 +22,7 @@ import { ListComponent } from './components/list/list.component';
     HttpModule,
     PaginationModule,
     ReactiveFormsModule,
+    SearchModule,
     TruncateModule
   ],
   providers: [
@@ -28,8 +30,7 @@ import { ListComponent } from './components/list/list.component';
   ],
   declarations: [
     ItemCardComponent,
-    ListComponent,
-    SearchComponent
+    ListComponent
   ],
   entryComponents: [
     ListComponent
