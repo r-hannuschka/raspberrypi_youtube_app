@@ -16,7 +16,7 @@ export class ApiService {
     };
 
     return this.httpClient
-      .get('http://localhost:8080/api/youtube/list', options)
+      .get('http://192.168.188.200:8080/api/youtube/list', options)
       .map( (res: Response) => res.json() );
   }
 
@@ -27,7 +27,7 @@ export class ApiService {
     };
 
     return this.httpClient
-      .get('http://localhost:8080/api/youtube/search', options)
+      .get('http://192.168.188.200:8080/api/youtube/search', options)
       .map( (res: Response) => res.json() );
   }
 }

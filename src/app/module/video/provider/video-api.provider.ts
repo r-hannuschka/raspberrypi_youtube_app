@@ -40,7 +40,7 @@ export class VideoApiProvider {
 
                 videos.forEach( (video, index: number) => {
                     if ( video.image && video.image.replace(/(^\s*|\s*$)/g, '') !== '' ) {
-                        video.image = `http://localhost:8080/${video.image}`;
+                        video.image = `http://192.168.188.200:8080/${video.image}`;
                     }
                 });
 
@@ -49,10 +49,14 @@ export class VideoApiProvider {
     }
 
     public playVideo(video: IVideoFile) {
-        this.httpProvider.post(this.apiConfig.video.play, {
+
+        return this.httpProvider.get(this.apiConfig.player.play, {
             params: {
-                video: video.id
+                video_id: video.id
             }
+        })
+        .map( (res: Response) => {
+            return res.json();
         });
     }
 }

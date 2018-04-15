@@ -2,7 +2,10 @@ export interface API {
     baseUrl: string;
 
     video: {
-        list: string,
+        list: string
+    };
+
+    player: {
         play: string
     };
 }

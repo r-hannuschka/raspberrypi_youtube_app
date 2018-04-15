@@ -61,7 +61,9 @@ export class ListComponent implements OnInit {
   }
 
   public play(video: IVideoFile) {
-    this.videoApi.playVideo(video);
+    this.videoApi.playVideo(video)
+      .subscribe( () => {
+      });
   }
 
   public delete() {

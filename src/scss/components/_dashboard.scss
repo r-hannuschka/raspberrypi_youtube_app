@@ -23,4 +23,33 @@
             margin-top: .5em;
         }
     }
+
+    .dashboard--tile.player {
+
+        display: flex;
+        flex-direction: column;
+
+        app-video-player {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 1em;
+        }
+
+        app-video-player-info {
+            flex: 1;
+
+            .video-info--image {
+                display: flex;
+                justify-content: center;
+            }
+        }
+
+        app-video-player-info,
+        app-video-player-controls {
+            .col {
+                @include make-col(12);
+            }
+        }
+    }
 }
