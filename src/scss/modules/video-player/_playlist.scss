@@ -1,0 +1,46 @@
+app-video-playlist {
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding:0;
+    }
+
+    .video-item {
+        display: flex;
+        margin-top: 2em;
+        padding-top: 2em;
+        border-top: 1px solid #ddd;
+    }
+
+    .video--image {
+        margin-right: 1em;
+    }
+
+    .video--content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .video--content-header {
+        min-width: 0;
+
+        h4 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 1.2em;
+        }
+    }
+
+    .video--content-body {
+        flex: 1;
+    }
+
+    .video--content-footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

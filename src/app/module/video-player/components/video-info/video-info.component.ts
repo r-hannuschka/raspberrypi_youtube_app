@@ -9,11 +9,13 @@ import * as PlayerEvents from '../../api/player';
 })
 export class VideoInfoComponent implements OnInit, OnDestroy {
 
+  private isDestroyed: Subject<boolean>;
+
   private socketMananger: SocketManager;
 
   private videoData: any;
 
-  private isDestroyed: Subject<boolean>;
+  private videoQueue: any;
 
   constructor( socketManager: SocketManager) {
     this.socketMananger = socketManager;
@@ -48,7 +50,8 @@ export class VideoInfoComponent implements OnInit, OnDestroy {
         break;
 
       case PlayerEvents.EVENT_PLAYER_CONNECT:
-        this.videoData = socketMessage.data.video;
+        this.videoData  = socketMessage.data.video;
+        this.videoQueue = socketMessage.data.videoQueue;
         break;
     }
   }
