@@ -10,14 +10,14 @@ export class PlaylistProvider {
         private httpClient: Http
     ) {}
 
-    public removeFromQueue(id) {
+    public remove(id) {
 
         const options: RequestOptionsArgs = {
             params: { id }
         };
 
         return this.httpClient
-            .get(`${this.baseUrl}/player/removeFromQueue`, options)
+            .get(`${this.baseUrl}/remove`, options)
             .map( (res: Response ) => res.json() );
     }
 }

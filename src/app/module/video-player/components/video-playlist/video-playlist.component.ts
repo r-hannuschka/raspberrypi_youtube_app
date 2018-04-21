@@ -10,11 +10,11 @@ import { PlaylistProvider } from '../../providers/playlist.provider';
 })
 export class VideoPlaylistComponent implements OnInit, OnDestroy {
 
+    private playlist: any[];
+
     private playlistProvider: PlaylistProvider;
 
     private socketManager: SocketManager;
-
-    private videoQueue: any[];
 
     private isDestroyed: Subject<boolean>;
 
@@ -41,11 +41,10 @@ export class VideoPlaylistComponent implements OnInit, OnDestroy {
         this.isDestroyed.next(true);
     }
 
-    public removeFromQueue(id: string) {
-        this.playlistProvider.removeFromQueue(id)
-            .subscribe( (queue) => {
-                // tslint:disable-next-line:no-debugger
-                debugger;
+    public remove(id: string) {
+        this.playlistProvider.remove(id)
+            .subscribe( (response) => {
+                this.playlist = response.data.playlist;
             });
     }
 
@@ -53,7 +52,7 @@ export class VideoPlaylistComponent implements OnInit, OnDestroy {
 
         switch ( message.event ) {
             case PlayerEvents.EVENT_PLAYER_CONNECT:
-                this.videoQueue = message.data.videoQueue;
+                this.playlist = message.data.playlist;
                 break;
         }
     }

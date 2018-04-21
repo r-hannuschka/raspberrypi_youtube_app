@@ -13,8 +13,6 @@ export class VideoInfoComponent implements OnInit, OnDestroy {
 
   private socketMananger: SocketManager;
 
-  private videoQueue: any;
-
   public video: any;
 
   constructor( socketManager: SocketManager) {
@@ -51,7 +49,6 @@ export class VideoInfoComponent implements OnInit, OnDestroy {
 
       case PlayerEvents.EVENT_PLAYER_CONNECT:
         this.video      = socketMessage.data.video;
-        this.videoQueue = socketMessage.data.videoQueue;
         break;
     }
   }
