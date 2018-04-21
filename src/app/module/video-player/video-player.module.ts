@@ -6,6 +6,7 @@ import { PlayerComponent } from './components/player/player.component';
 import { VideoInfoComponent } from './components/video-info/video-info.component';
 import { VideoPlaylistComponent } from './components/video-playlist/video-playlist.component';
 import { PlayerProvider } from './providers/player.provider';
+import { PlaylistProvider } from './providers/playlist.provider';
 
 @NgModule({
   exports: [PlayerComponent, VideoPlaylistComponent],
@@ -14,6 +15,6 @@ import { PlayerProvider } from './providers/player.provider';
     SocketModule
   ],
   declarations: [ControlsComponent, PlayerComponent, VideoInfoComponent, VideoPlaylistComponent ],
-  providers: [PlayerProvider]
+  providers: [PlayerProvider, PlaylistProvider]
 })
 export class VideoPlayerModule { }

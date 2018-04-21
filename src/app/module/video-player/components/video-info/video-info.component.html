@@ -1,11 +1,11 @@
 <div class="row">
-  <ng-template [ngIf]="videoData">
+  <ng-template [ngIf]="video">
     <div class="col col-lg-6 video-info--image">
-      <img src="http://192.168.188.200:8080/{{videoData.image}}"> 
+      <img src="http://192.168.188.200:8080/{{video.data.image}}"> 
     </div>
     <div class="col col-lg-6">
       <ul>
-        <li>{{videoData.name}}</li>
+        <li>{{video.data.name}}</li>
       </ul>
     </div>
   </ng-template>

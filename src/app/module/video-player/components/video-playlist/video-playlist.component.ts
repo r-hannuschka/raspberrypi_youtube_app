@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SocketManager } from '@app-module/socket';
 import { Subject } from 'rxjs/Subject';
 import * as PlayerEvents from '../../api/player';
+import { PlaylistProvider } from '../../providers/playlist.provider';
 
 @Component({
   selector: 'app-video-playlist',
@@ -9,13 +10,19 @@ import * as PlayerEvents from '../../api/player';
 })
 export class VideoPlaylistComponent implements OnInit, OnDestroy {
 
+    private playlistProvider: PlaylistProvider;
+
     private socketManager: SocketManager;
 
     private videoQueue: any[];
 
     private isDestroyed: Subject<boolean>;
 
-    public constructor(socketManager: SocketManager) {
+    public constructor(
+        playlistProvider: PlaylistProvider,
+        socketManager: SocketManager
+    ) {
+        this.playlistProvider = playlistProvider;
         this.socketManager = socketManager;
         this.isDestroyed   = new Subject();
     }
@@ -32,6 +39,14 @@ export class VideoPlaylistComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() {
         this.isDestroyed.next(true);
+    }
+
+    public removeFromQueue(id: string) {
+        this.playlistProvider.removeFromQueue(id)
+            .subscribe( (queue) => {
+                // tslint:disable-next-line:no-debugger
+                debugger;
+            });
     }
 
     private onSocketMessage(message) {

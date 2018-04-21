@@ -3,14 +3,14 @@
         <li *ngFor="let video of videoQueue">
             <div class="video-item">
                 <div class="video--image">
-                    <img src="http://192.168.188.200:8080/{{video.image}}" >
+                    <img src="http://192.168.188.200:8080/{{video.data.image}}" >
                 </div>
                 <div class="video--content">
                     <div class="video--content-header">
-                        <h4>{{video.name}}</h4>
+                        <h4>{{video.data.name}}</h4>
                     </div> 
                     <div class="video--content-body">
-                        {{video.description}}
+                        {{video.data.description}}
                     </div>
                     <div class="video--content-footer">
                         <div class="btn-toolbar">
@@ -28,7 +28,7 @@
                                 </button>
                             </div>
                             <div class="btn-group ml-2">
-                                <button class="btn btn-dark">
+                                <button class="btn btn-dark" (click)="removeFromQueue(video.id)">
                                     <i class="fa fa-ban"></i>
                                 </button>
                             </div>
