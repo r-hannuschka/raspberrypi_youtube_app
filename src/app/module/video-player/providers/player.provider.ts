@@ -26,11 +26,9 @@ export class PlayerProvider {
         // @todo implement
     }
 
-    public muteVideo() {
-        // @todo implement
-    }
-
-    public unmuteVideo() {
-        // @todo implement
+    public muteVideo(mute) {
+        return this.httpClient
+            .get(`${this.baseUrl}/mute`, { params: {enabled: mute} })
+            .map( (res: Response) => res.json() );
     }
 }

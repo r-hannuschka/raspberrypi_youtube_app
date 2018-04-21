@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import fontawesome from '@fortawesome/fontawesome';
 import { faVolumeOff, faVolumeUp } from '@fortawesome/fontawesome-free-solid';
 import { PlayerProvider } from '../../providers/player.provider';
@@ -9,9 +9,13 @@ import { PlayerProvider } from '../../providers/player.provider';
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./controls.component.scss']
 })
-export class ControlsComponent implements OnInit {
+export class ControlsComponent {
 
-  public videoPaused = false;
+  @Input()
+  public muted: boolean;
+
+  @Input()
+  public paused: boolean;
 
   constructor(
     private playerProvider: PlayerProvider
@@ -19,14 +23,11 @@ export class ControlsComponent implements OnInit {
     fontawesome.library.add( faVolumeOff, faVolumeUp);
   }
 
-  ngOnInit() {
-  }
-
   public pause() {
     this.playerProvider
       .pauseVideo()
       .subscribe( () => {
-        this.videoPaused = true;
+        this.paused = true;
       });
   }
 
@@ -34,7 +35,15 @@ export class ControlsComponent implements OnInit {
     this.playerProvider
       .resumeVideo()
       .subscribe( () => {
-        this.videoPaused = false;
+        this.paused = false;
+      });
+  }
+
+  public mute() {
+    this.playerProvider
+      .muteVideo( ! this.muted )
+      .subscribe( () => {
+        this.muted = ! this.muted;
       });
   }
 }

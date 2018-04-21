@@ -51,6 +51,7 @@ export class VideoPlaylistComponent implements OnInit, OnDestroy {
     private onSocketMessage(message) {
 
         switch ( message.event ) {
+            case PlayerEvents.EVENT_PLAYER_PLAY:
             case PlayerEvents.EVENT_PLAYER_CONNECT:
                 this.playlist = message.data.playlist;
                 break;

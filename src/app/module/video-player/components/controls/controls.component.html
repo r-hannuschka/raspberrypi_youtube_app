@@ -1,23 +1,32 @@
-<ng-template #resumeVideo>
+<ng-template #resumevideo>
     <button class="btn btn-dark" (click)="resume()"><i class="fa fa-play"></i></button>
 </ng-template>
 
-<ng-template #pauseVideo>
+<ng-template #pausevideo>
   <button class="btn btn-dark" (click)="pause()"><i class="fa fa-pause"></i></button>
+</ng-template>
+
+<ng-template #mutevideo>
+  <button class="btn btn-dark" (click)="mute()" ><i class="fa fa-volume-off"></i></button>
+</ng-template>
+
+<ng-template #unmutevideo>
+  <button class="btn btn-dark" (click)="mute()" ><i class="fa fa-volume-up"></i></button>
 </ng-template>
 
 <div class="container-fluid">
   <div class="row">
     <div class="col text-center">
       <div class="btn-group">
-        <button class="btn btn-dark"><i class="fa fa-stop"></i></button>
+        <button class="btn btn-dark"><i class="fa fa-power-off"></i></button>
 
-        <ng-container *ngIf="videoPaused; then resumeVideo; else pauseVideo">
+        <ng-container *ngIf="paused; then resumevideo; else pausevideo">
         </ng-container>
 
-        <button class="btn btn-dark"><i class="fa fa-volume-off"></i></button>
-        <button class="btn btn-dark"><i class="fa fa-volume-down"></i></button>
-        <button class="btn btn-dark"><i class="fa fa-volume-up"></i></button>
+        <ng-container *ngIf="! muted; then unmutevideo; else mutevideo">
+        </ng-container>
+
+        <button class="btn btn-dark">next</button>
       </div>
     </div>
   </div>
