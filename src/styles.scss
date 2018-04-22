@@ -1,9 +1,9 @@
-@import "./scss/variables";
-@import "../node_modules/bootstrap/scss/bootstrap";
-@import "./scss/mixins";
-@import "./scss/layout";
-@import "./scss/components";
-@import "./scss/modules";
+@import "./skin/scss/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "./skin/scss/mixins";
+@import "./skin/scss/components";
+@import "./skin/scss/layout";
+@import "./skin/scss/modules";
 
 .invalid-feedback {
     display: block;

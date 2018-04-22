@@ -12,6 +12,9 @@ import { PlayerProvider } from '../../providers/player.provider';
 export class ControlsComponent {
 
   @Input()
+  public disabled: boolean;
+
+  @Input()
   public muted: boolean;
 
   @Input()
@@ -21,6 +24,14 @@ export class ControlsComponent {
     private playerProvider: PlayerProvider
   ) {
     fontawesome.library.add( faVolumeOff, faVolumeUp);
+  }
+
+  public mute() {
+    this.playerProvider
+      .muteVideo()
+      .subscribe( () => {
+        this.muted = true;
+      });
   }
 
   public pause() {
@@ -39,11 +50,19 @@ export class ControlsComponent {
       });
   }
 
-  public mute() {
+  public poweroff() {
     this.playerProvider
-      .muteVideo( ! this.muted )
+      .powerOff()
       .subscribe( () => {
-        this.muted = ! this.muted;
+        // not empty
+      });
+  }
+
+  public unmute() {
+    this.playerProvider
+      .unmuteVideo()
+      .subscribe( () => {
+        this.muted = false;
       });
   }
 }

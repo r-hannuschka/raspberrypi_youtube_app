@@ -53,7 +53,11 @@ export class VideoPlaylistComponent implements OnInit, OnDestroy {
         switch ( message.event ) {
             case PlayerEvents.EVENT_PLAYER_PLAY:
             case PlayerEvents.EVENT_PLAYER_CONNECT:
-                this.playlist = message.data.playlist;
+                this.playlist = message.data.playlist || [];
+                break;
+
+            case PlayerEvents.EVENT_PLAYER_CLOSE:
+                this.playlist = [];
                 break;
         }
     }

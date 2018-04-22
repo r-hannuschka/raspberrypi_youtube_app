@@ -1,0 +1,6 @@
+app-video-player-controls {
+
+    .btn-group.disabled {
+        @include disabled(#999);
+    }
+}

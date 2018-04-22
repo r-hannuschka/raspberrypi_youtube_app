@@ -1,0 +1,22 @@
+@import "./video-player/controls";
+@import "./video-player/playlist";
+
+app-video-player {
+    position: relative;
+
+    &:not(.active):after {
+        background: url('skin/images/please_stand_by.png') no-repeat center center;
+        background-size: cover;
+        content: "";
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+    }
+
+    app-video-player-info, 
+    app-video-player-controls {
+        @include make-container();
+        display: block;
+    }
+}

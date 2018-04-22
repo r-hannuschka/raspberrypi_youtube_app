@@ -22,13 +22,21 @@ export class PlayerProvider {
             .map( (res: Response) => res.json() );
     }
 
-    public stopVideo() {
-        // @todo implement
+    public powerOff() {
+        return this.httpClient
+            .get(`${this.baseUrl}/shutdown`)
+            .map( (res: Response) => res.json() );
     }
 
-    public muteVideo(mute) {
+    public muteVideo() {
         return this.httpClient
-            .get(`${this.baseUrl}/mute`, { params: {enabled: mute} })
+            .get(`${this.baseUrl}/mute`)
+            .map( (res: Response) => res.json() );
+    }
+
+    public unmuteVideo() {
+        return this.httpClient
+            .get(`${this.baseUrl}/unmute`)
             .map( (res: Response) => res.json() );
     }
 }

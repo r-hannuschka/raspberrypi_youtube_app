@@ -1,0 +1,15 @@
+@mixin disabled($bg-color: #000) {
+
+    position: relative;
+
+    &:after {
+        content: "";
+        background: $bg-color;
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        opacity: .75;
+    }
+}
