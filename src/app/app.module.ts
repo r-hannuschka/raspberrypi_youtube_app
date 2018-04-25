@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { DownloadModule } from '@app-module/download';
+import { SocketModule } from '@app-module/socket';
 import { VideoModule } from '@app-module/video';
 import { VideoPlayerModule } from '@app-module/video-player';
 import { YoutubeModule } from '@app-module/youtube';
@@ -16,7 +17,7 @@ import {
   YoutubePageComponent
 } from './components';
 
-import { videoConfig as videoModuleConfig } from './etc/video.config';
+import { config as appConfig } from './etc/config';
 
 import { routes } from './api/data/routes';
 import { menuItems } from './api/data/menu-items';
@@ -34,9 +35,10 @@ import { menuItems } from './api/data/menu-items';
     BrowserModule,
     DownloadModule,
     RouterModule.forRoot(routes),
-    VideoModule.forRoot(videoModuleConfig),
-    VideoPlayerModule,
-    YoutubeModule
+    SocketModule.forRoot(appConfig.socket),
+    VideoModule.forRoot(appConfig.module.video),
+    VideoPlayerModule.forRoot(appConfig.module.videoPlayer),
+    YoutubeModule.forRoot(appConfig.module.youtube)
   ],
   providers: [
     { provide: 'MenuItems', useValue: menuItems }

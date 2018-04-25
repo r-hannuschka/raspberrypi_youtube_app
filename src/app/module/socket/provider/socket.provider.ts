@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import * as socketIOClient from 'socket.io-client';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -28,8 +28,8 @@ export class SocketManager {
    */
   private channelID: string;
 
-  constructor() {
-    this.socket = socketIOClient('http://192.168.188.200:8080');
+  constructor(@Inject('SocketConfig') config) {
+    this.socket = socketIOClient(config.baseUrl);
     this.channelMap = new Map();
     this.registerEvents();
   }

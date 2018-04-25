@@ -1,13 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Http, Response, RequestOptionsArgs } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ApiService {
 
+  private config;
+
   constructor(
+    @Inject('YoutubeConfig') config,
     private httpClient: Http
-  ) {}
+  ) {
+    this.config = config;
+  }
 
   public list(param = {}) {
 
@@ -16,7 +21,7 @@ export class ApiService {
     };
 
     return this.httpClient
-      .get('http://192.168.188.200:8080/api/youtube/list', options)
+      .get(this.config.api.list, options)
       .map( (res: Response) => res.json() );
   }
 
@@ -27,7 +32,7 @@ export class ApiService {
     };
 
     return this.httpClient
-      .get('http://192.168.188.200:8080/api/youtube/search', options)
+      .get(this.config.api.search, options)
       .map( (res: Response) => res.json() );
   }
 }

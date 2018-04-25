@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Routes } from '@angular/router';
 import { TruncateModule } from 'ng2-truncate';
 
@@ -21,9 +21,6 @@ import { ApiService } from './provider/api.service';
     SearchModule,
     TruncateModule
   ],
-  providers: [
-    ApiService
-  ],
   declarations: [
     ItemCardComponent,
     ListComponent
@@ -36,4 +33,14 @@ import { ApiService } from './provider/api.service';
   ]
 })
 export class YoutubeModule {
+
+    public static forRoot(config): ModuleWithProviders {
+        return {
+            ngModule: YoutubeModule,
+            providers: [
+                { provide: 'YoutubeConfig', useValue: config },
+                ApiService
+            ]
+        };
+    }
 }

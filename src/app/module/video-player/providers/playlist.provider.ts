@@ -4,11 +4,14 @@ import { Http, Response, RequestOptionsArgs } from '@angular/http';
 @Injectable()
 export class PlaylistProvider {
 
-    private baseUrl = 'http://192.168.188.200:8080/api/video/playlist';
+    private config;
 
     constructor (
+        @Inject('PlaylistConfig') config: any,
         private httpClient: Http
-    ) {}
+    ) {
+        this.config = config;
+    }
 
     public remove(id) {
 
@@ -17,7 +20,7 @@ export class PlaylistProvider {
         };
 
         return this.httpClient
-            .get(`${this.baseUrl}/remove`, options)
+            .get(this.config.api.remove, options)
             .map( (res: Response ) => res.json() );
     }
 }

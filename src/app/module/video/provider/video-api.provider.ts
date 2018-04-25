@@ -4,18 +4,20 @@ import { API } from '../api/config/api';
 import { Observable } from 'rxjs/Observable';
 
 import { IVideoResponse, IVideoFile } from '../api';
-import { IVideoConfig } from '../api/config';
 
 @Injectable()
 export class VideoApiProvider {
 
-    private apiConfig: API;
+    private config: any;
+
+    private playerConfig: any;
 
     constructor(
-        @Inject('VideoConfig') config: IVideoConfig,
+        @Inject('VideoConfig') config: any,
+        @Inject('PlayerConfig') playerConfig: any,
         private httpProvider: Http
     ) {
-        this.apiConfig = config.api;
+        this.config = config;
     }
 
     /**
@@ -33,14 +35,14 @@ export class VideoApiProvider {
             }
         };
 
-        return this.httpProvider.get(this.apiConfig.video.list, requestArgs)
+        return this.httpProvider.get(this.config.api.list, requestArgs)
             .map( (res: Response): IVideoResponse => {
                 const body = res.json();
                 const videos: IVideoFile[] = body.data.videos;
 
                 videos.forEach( (video, index: number) => {
                     if ( video.image && video.image.replace(/(^\s*|\s*$)/g, '') !== '' ) {
-                        video.image = `http://192.168.188.200:8080/${video.image}`;
+                        video.image = `${this.config.api.baseUrl}/${video.image}`;
                     }
                 });
 
@@ -50,7 +52,7 @@ export class VideoApiProvider {
 
     public playVideo(video: IVideoFile) {
 
-        return this.httpProvider.get(this.apiConfig.player.play, {
+        return this.httpProvider.get(this.playerConfig.api.play, {
             params: {
                 video_id: video.id
             }

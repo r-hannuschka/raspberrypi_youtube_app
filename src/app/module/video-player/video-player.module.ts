@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SocketModule } from '@app-module/socket';
 import { ControlsComponent } from './components/controls/controls.component';
@@ -14,7 +14,19 @@ import { PlaylistProvider } from './providers/playlist.provider';
     CommonModule,
     SocketModule
   ],
-  declarations: [ControlsComponent, PlayerComponent, VideoInfoComponent, VideoPlaylistComponent ],
-  providers: [PlayerProvider, PlaylistProvider]
+  declarations: [ControlsComponent, PlayerComponent, VideoInfoComponent, VideoPlaylistComponent ]
 })
-export class VideoPlayerModule { }
+export class VideoPlayerModule {
+
+    public static forRoot(config): ModuleWithProviders {
+        return {
+            ngModule: VideoPlayerModule,
+            providers: [
+                { provide: 'PlayerConfig'  , useValue: config.player   },
+                { provide: 'PlaylistConfig', useValue: config.playlist },
+                PlayerProvider,
+                PlaylistProvider
+            ]
+        };
+    }
+}

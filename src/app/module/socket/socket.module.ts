@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {SocketManager} from './provider/socket.provider';
@@ -7,7 +7,17 @@ import {SocketManager} from './provider/socket.provider';
   imports: [
     CommonModule
   ],
-  declarations: [],
-  providers: [SocketManager]
+  declarations: []
 })
-export class SocketModule { }
+export class SocketModule {
+
+  public static forRoot(config): ModuleWithProviders {
+    return {
+      ngModule: SocketModule,
+      providers: [
+        { provide: 'SocketConfig', useValue: config },
+        SocketManager
+      ]
+    };
+  }
+}
