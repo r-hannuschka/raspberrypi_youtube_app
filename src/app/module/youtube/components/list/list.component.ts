@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, Input, TemplateRef } from '@angular/core';
 import { FilterFactory, FilterService, IFilter } from '@app-module/filter';
-import { IPageEvent, PaginationService } from '@app-module/pagination';
+import { IPageData, PaginationService } from '@app-module/pagination';
 import { Observable } from 'rxjs/Observable';
 
 import { IItem, IListItem, IResponseList } from '../../api';
@@ -62,10 +62,9 @@ export class ListComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.pagination
-      .getNotifier()
-      .subscribe((event: IPageEvent) => {
-        this.handlePagniationEvent(event);
+    this.pagination.pageChange
+      .subscribe((page) => {
+        this.handlePageChangeEvent(page);
       });
 
     this.fetchData()
@@ -261,15 +260,11 @@ export class ListComponent implements OnInit {
    * @param {IPageEvent} event
    * @memberof ListComponent
    */
-  private handlePagniationEvent(event: IPageEvent) {
-
-    if (event.name === PaginationService.DISPLAY_PAGE) {
-      this.listDataModel.setPage(event.data.page);
-
-      this.fetchData().subscribe((items: IListItem[]) => {
-        this.items = this.items.concat(items);
-      });
-    }
+  private handlePageChangeEvent(page: number) {
+    this.listDataModel.setPage(page);
+    this.fetchData().subscribe((items: IListItem[]) => {
+      this.items = this.items.concat(items);
+    });
   }
 
   /**

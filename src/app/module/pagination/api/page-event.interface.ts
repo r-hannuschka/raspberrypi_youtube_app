@@ -1,8 +1,8 @@
-export interface IPageEvent {
-    name: string;
+export interface IPageData {
 
-    data: {
-        page?: number
-    };
+    getCurrentPage(): number;
 
+    getPageCount(): number;
+
+    getItemCount(): number;
 }

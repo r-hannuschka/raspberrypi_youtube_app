@@ -1,43 +1,23 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { IConfig, IPageEvent } from '../api';
+import { IConfig, IPageData } from '../api';
+import { PageModel } from '../model/page.model';
 
 @Injectable()
 export class PaginationService {
 
-    public static readonly CONFIGURED = 'configurepagination';
-
-    public static readonly DISPLAY_PAGE = 'displaypage';
-
-    public static readonly UPDATE = 'updatepagination';
-
-    private currentPage: number;
-
     private disabled: boolean;
 
-    private itemTotalCount: number;
+    private pageModel: PageModel;
 
-    private itemPageCount: number;
+    public pageChange: Subject<number>;
 
-    private pageCount: number;
-
-    private pageSubject: Subject<IPageEvent>;
-
-    private isConfigured: boolean;
+    public pageUpdate: Subject<IPageData>;
 
     constructor() {
-
-        // set default values
-        this.itemTotalCount = 1;
-        this.currentPage = 1;
-        this.itemPageCount = 10;
-        this.pageCount = 1;
-
-        this.pageSubject = new Subject<IPageEvent>();
-
-        this.isConfigured = false;
+        this.pageModel  = new PageModel();
+        this.pageChange = new Subject();
+        this.pageUpdate = new Subject<IPageData>();
     }
 
     /**
@@ -46,17 +26,9 @@ export class PaginationService {
      * @param {({} | string)} data
      * @param {number} [value]
      */
-    public configure(data: IConfig | string, value?: number): void {
-        if ( !this.isConfigured ) {
-            this.setData(data, value);
-            this.notifyObserver({
-                name: PaginationService.CONFIGURED,
-                data: {
-                    page: this.getCurrentPage()
-                }
-            });
-            this.isConfigured = true;
-        }
+    public configure(data: IConfig, value?: number): void {
+        this.pageModel.setCurrentPage(data.currentPage);
+        this.pageModel.setItemPageCount(data.itemPageCount);
     }
 
     public disable(disable: boolean) {
@@ -67,31 +39,8 @@ export class PaginationService {
         return this.disabled;
     }
 
-    /**
-     * returns a property
-     *
-     * @param {string} property
-     * @returns {number}
-     */
-    public get(property: string): number {
-        if (this.hasOwnProperty(property)) {
-            return this[property];
-        }
-        return -1;
-    }
-
     public getCurrentPage(): number {
-        return this.currentPage;
-    }
-
-    /**
-     * get pageNotifier to subscribe for events
-     *
-     * @returns {Observable<string>}
-     */
-    public getNotifier(): Observable<IPageEvent> {
-        return this.pageSubject
-            .asObservable();
+        return this.pageModel.getCurrentPage();
     }
 
     /**
@@ -101,7 +50,7 @@ export class PaginationService {
      * @memberof PaginationService
      */
     public isLastPage(): boolean {
-        return this.getCurrentPage() === this.pageCount;
+        return this.getCurrentPage() === this.pageModel.getPageCount();
     }
 
     /**
@@ -112,17 +61,12 @@ export class PaginationService {
     public showPage(page: number): void {
 
         let validPage = false;
-        validPage = this.pageCount >= page;
+        validPage = this.pageModel.getPageCount() ? this.pageModel.getPageCount() >= page : true;
         validPage = validPage && page > 0;
 
         if (validPage) {
-            this.setData('currentPage', page);
-            this.notifyObserver({
-                name: PaginationService.DISPLAY_PAGE,
-                data: {
-                    page
-                }
-            });
+            this.pageModel.setCurrentPage(page);
+            this.pageChange.next(page);
         }
     }
 
@@ -141,53 +85,12 @@ export class PaginationService {
      * @param {({} | string)} data
      * @param {number} [value]
      */
-    public update(data: IConfig | string, value?: number): void {
-        this.setData(data, value);
-        this.notifyObserver({
-            name: PaginationService.UPDATE,
-            data: {}
-        });
-    }
+    public update(data: IConfig, value?: number): void {
 
-    /**
-     * notfiy observer on update or show page
-     *
-     * @private
-     * @param {string} event
-     */
-    private notifyObserver(event: IPageEvent): void {
-        this.pageSubject.next(event);
-    }
+        this.pageModel.setItemCount(data.itemTotalCount);
+        this.pageModel.setPageCount(
+            Math.ceil(this.pageModel.getItemCount() / this.pageModel.getItemPageCount()));
 
-    /**
-     * write data
-     *
-     * @private
-     * @param {({} | string)} data
-     * @param {number} [value]
-     */
-    private setData(data: {} | string, value?: number): void {
-
-        switch (Object.prototype.toString.apply(data).match(/\s([^\]]+)/)[1].toLowerCase()) {
-            case 'object':
-                for (const key of Object.keys(data as Object)) {
-                    this.setProperty(key, data[key]);
-                }
-                break;
-            case 'string':
-                this.setProperty(data, value);
-                break;
-            default:
-                console.error('no valid value');
-        }
-
-        this.pageCount = Math.ceil(this.itemTotalCount / this.itemPageCount);
-    }
-
-    private setProperty(property, value): void {
-
-        if (this.hasOwnProperty(property) && value) {
-            this[property] = value;
-        }
+        this.pageUpdate.next(this.pageModel);
     }
 }

@@ -1,5 +1,6 @@
 import { Component, Host } from '@angular/core';
 import { PaginationService } from '../../providers/pagination.service';
+import { IPageData } from '../../api';
 
 interface PageItem {
     content: string | number;
@@ -24,9 +25,10 @@ export class PageNavigationComponent {
     }
 
     protected initialize() {
-        this.pagination.getNotifier()
-            .subscribe((event) => {
-                this.createPaginationItems();
+
+        this.pagination.pageUpdate
+            .subscribe((pageData: IPageData) => {
+                this.createPaginationItems(pageData);
             });
     }
 
@@ -39,10 +41,10 @@ export class PageNavigationComponent {
         this.pagination.showPage(page);
     }
 
-    private createPaginationItems() {
+    private createPaginationItems(data: IPageData) {
 
         const items: PageItem[] = [];
-        const pageCount: number = this.pagination.get('pageCount');
+        const pageCount: number = data.getPageCount();
         let pages: Array<string | number> = [];
 
         if (pageCount <= 1) {
@@ -52,7 +54,7 @@ export class PageNavigationComponent {
 
         if (pageCount > 5) {
 
-            const currentPage = this.pagination.getCurrentPage();
+            const currentPage = data.getCurrentPage();
             const subPages: Array<string | number> = [];
 
             pages = [1, pageCount];

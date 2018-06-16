@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, Input, TemplateRef } from '@angular/core';
 import { PaginationService } from '../../../pagination/providers/pagination.service';
-import { IPageEvent } from '../../../pagination/api/page-event.interface';
+import { IPageData } from '../../../pagination/api/page-event.interface';
 
 import { IVideoFile, IVideoResponse } from '../../api/index';
 import { VideoApiProvider } from '../../provider/video-api.provider';
@@ -50,10 +50,9 @@ export class ListComponent implements OnInit {
       currentPage: 1
     });
 
-    this.pagination
-      .getNotifier()
-      .subscribe((event: IPageEvent) => {
-        this.handlePaginationEvent(event);
+    this.pagination.pageChange.subscribe((page: number) => {
+        this.page = page;
+        this.loadVideos();
       });
 
     // load videos
@@ -92,26 +91,10 @@ export class ListComponent implements OnInit {
    * @memberof ListComponent
    */
   protected handleApiResponse(response: IVideoResponse) {
-      const total: number = response.total;
-      this.pagination.update({
-        itemTotalCount: total
-      });
       this.videos = response.videos;
-  }
 
-  /**
-   * handle pagination event
-   *
-   * @protected
-   * @param {IPageEvent} event
-   * @memberof ListComponent
-   */
-  protected handlePaginationEvent(event: IPageEvent) {
-    switch ( event.name ) {
-      case PaginationService.DISPLAY_PAGE:
-          this.page = this.pagination.getCurrentPage();
-          this.loadVideos();
-        break;
-    }
+      this.pagination.update({
+        itemTotalCount: response.total
+      });
   }
 }

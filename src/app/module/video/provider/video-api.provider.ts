@@ -18,6 +18,7 @@ export class VideoApiProvider {
         private httpProvider: Http
     ) {
         this.config = config;
+        this.playerConfig = playerConfig;
     }
 
     /**

@@ -1,8 +1,6 @@
 import { Component, ElementRef, Host, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
 import { PaginationService } from '../../providers/pagination.service';
-import { IPageEvent } from '../../api/page-event.interface';
-import { Observer, Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
