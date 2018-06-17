@@ -1,4 +1,4 @@
-import { Component, Host } from '@angular/core';
+import { Component, Host, OnInit } from '@angular/core';
 import { PaginationService } from '../../providers/pagination.service';
 import { IPageData } from '../../api';
 
@@ -12,33 +12,41 @@ interface PageItem {
     selector: 'app-page-navigation',
     templateUrl: 'page-navigation.component.html'
 })
-export class PageNavigationComponent {
+export class PageNavigationComponent implements OnInit {
 
     public pageItems: PageItem[];
+
+    public pageCount: number;
 
     private pagination: PaginationService;
 
     constructor( @Host() pagination: PaginationService) {
         this.pagination = pagination;
         this.pageItems = [];
-        this.initialize();
     }
 
-    protected initialize() {
-
+    public ngOnInit() {
         this.pagination.pageUpdate
             .subscribe((pageData: IPageData) => {
+                this.pageCount = pageData.getPageCount();
                 this.createPaginationItems(pageData);
             });
     }
 
     /**
-     * @todo implement
      *
      * @param {number} page
      */
     public setPage(page: number) {
         this.pagination.showPage(page);
+    }
+
+    public goNextPage() {
+        this.setPage( this.pagination.getCurrentPage() + 1);
+    }
+
+    public goPrevPage() {
+        this.setPage( this.pagination.getCurrentPage() - 1);
     }
 
     private createPaginationItems(data: IPageData) {

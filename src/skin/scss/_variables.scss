@@ -1,7 +1,10 @@
 @import '~bootstrap/scss/_functions.scss';
 @import '~bootstrap/scss/_variables.scss';
 
-$app-theme-colors: ( "black": #151515);
+$app-theme-colors: ( 
+    "secondary": lightblue,
+    "black": #151515
+);
 
 // extend bootstrap theme colors
 $theme-colors: map-merge( $theme-colors, $app-theme-colors);

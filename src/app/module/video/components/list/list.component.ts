@@ -1,13 +1,12 @@
-import { Component, Inject, OnInit, Input, TemplateRef } from '@angular/core';
+import { Component, Inject, Input, OnInit, TemplateRef } from '@angular/core';
 import { PaginationService } from '../../../pagination/providers/pagination.service';
-import { IPageData } from '../../../pagination/api/page-event.interface';
 
 import { IVideoFile, IVideoResponse } from '../../api/index';
 import { VideoApiProvider } from '../../provider/video-api.provider';
 import { IVideoConfig } from '../../api/config';
 
 @Component({
-  providers    : [PaginationService],    // provide own instance of Pagination Service
+  providers    : [PaginationService],  // provide own instance of Pagination Service
   selector     : 'app-video-list',
   styleUrls    : ['./list.component.scss'],
   templateUrl  : './list.component.html',
@@ -45,6 +44,7 @@ export class ListComponent implements OnInit {
    * @memberof ListComponent
    */
   public ngOnInit() {
+
     this.pagination.configure({
       itemPageCount: this.itemsPerPage || 18,
       currentPage: 1
@@ -55,7 +55,6 @@ export class ListComponent implements OnInit {
         this.loadVideos();
       });
 
-    // load videos
     this.loadVideos();
   }
 
